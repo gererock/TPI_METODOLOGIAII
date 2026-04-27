@@ -1,9 +1,9 @@
-package com.bodypaint.backend.bodypanit;
+package com.bodypaint;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = BodypanitApplication.class)
 class BodypanitApplicationTests {
 
 	@Test
