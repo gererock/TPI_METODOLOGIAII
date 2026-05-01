@@ -9,24 +9,68 @@ async function crearProducto() {
         descripcion: document.getElementById("descripcion").value.trim()
     };
 
-    if (!producto.nombre || !producto.marca || isNaN(producto.precio)) {
-        alert("Por favor completá los campos obligatorios.");
-        return;
-      }
     
       try{
+        const response = await fetch(`${API_URL}/api/productos`, {
+
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(producto)
+
+        });
+
+
+        const mensaje = await response.text(); 
+
+        if (response.status === 409) {
+
+            alert(mensaje); 
+
+            return;
+
+        }
+
+        if (!response.ok) {
+
+          alert("Error inesperado: " + response.status);
+
+          return;
+
+        }
+
+        alert("Producto creado correctamente");
+
+        limpiarFormulario();
+
 
       }catch(error){
+
         console.error(error);
+
         alert("No se pudo conectar con el servidor")
-      }
 
-      function limpiarFormulario() {
-        ["nombre", "marca", "precio", "stock", "descripcion"]
-          .forEach(id => document.getElementById(id).value = "");
-      }
-
-      function cancelar() {
-        if (confirm("¿Cancelar? Se perderán los datos.")) limpiarFormulario();
       }
 }
+
+function limpiarFormulario() {
+
+  ["nombre", "marca", "precio", "stock", "descripcion"]
+    .forEach(id => document.getElementById(id).value = "");
+
+}
+
+function cancelar() {
+
+  if (confirm("¿Cancelar? Se perderán los datos.")) limpiarFormulario();
+
+}
+
+
+const crearProductoButton = document.getElementById("btn-crear-producto");
+const cancelarButton = document.getElementById("btn-cancelar");
+
+crearProductoButton.addEventListener("click", crearProducto);
+
+cancelarButton.addEventListener("click", cancelar);
