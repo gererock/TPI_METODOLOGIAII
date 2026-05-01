@@ -6,6 +6,7 @@ public record ProductoResponseDto(
     String marca,
     Double precio,
     Integer stock,
+    String foto,
     String descripcion
     
 ) {

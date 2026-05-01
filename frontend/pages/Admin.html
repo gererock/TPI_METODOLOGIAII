@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/frontend/css/CreateAdminProduct.css">
     <link rel="stylesheet" href="/frontend/css/styleIndex.css">
-    <script src="/frontend/js/Admin.js" defer></script>
-    <script src="/frontend/js/Api.js" defer></script>
+    <script src="/frontend/js/ApiAdmin.js" defer></script>
 </head>
 <body>
     <main>
@@ -36,12 +35,16 @@
                   <label>Precio</label>
                   <div class="admin-price-wrapper">
                     <span class="prefix">$</span>
-                    <input type="number" id="precio" required placeholder="0.00" min="0" />
+                    <input type="number" id="precio" required placeholder="1.00" min="1" />
                   </div>
                 </div>
                 <div class="admin-form-group">
                   <label>Stock</label>
                   <input type="number" id="stock" required placeholder="1" min="1" />
+                </div>
+                <div class="admin-form-group" style="grid-column: span 2;">
+                  <label>Foto</label>
+                  <input type="text" id="foto" required placeholder="Ej: https://example.com/foto.jpg"/>
                 </div>
               </div>
           

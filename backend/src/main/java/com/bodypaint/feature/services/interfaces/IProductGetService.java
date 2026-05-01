@@ -1,7 +1,7 @@
 package com.bodypaint.feature.services.interfaces;
 
-import com.bodypaint.feature.models.Producto;
+import com.bodypaint.feature.dto.response.ProductoResponseDto;
 
 public interface IProductGetService {
-    Producto getProductoById(Long id);
+    ProductoResponseDto getProductoById(Long id);
 }

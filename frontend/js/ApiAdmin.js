@@ -6,11 +6,19 @@ async function crearProducto() {
         marca: document.getElementById("marca").value.trim(),
         precio: parseFloat(document.getElementById("precio").value),
         stock: parseInt(document.getElementById("stock").value),
+        foto: document.getElementById("foto").value,
         descripcion: document.getElementById("descripcion").value.trim()
     };
 
     
+
+    
       try{
+        
+        if(producto.precio <= 0 || producto.stock <= 0){
+          return alert("El campo stock o precio son menores al minimo requerido.");
+        }
+      
         const response = await fetch(`${API_URL}/api/productos`, {
 
           method: "POST",
@@ -56,7 +64,7 @@ async function crearProducto() {
 
 function limpiarFormulario() {
 
-  ["nombre", "marca", "precio", "stock", "descripcion"]
+  ["nombre", "marca", "precio", "stock","foto", "descripcion"]
     .forEach(id => document.getElementById(id).value = "");
 
 }

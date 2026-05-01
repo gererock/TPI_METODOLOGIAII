@@ -30,6 +30,8 @@ public class Producto {
 
     private Integer stock;
 
+    private String foto;
+
     private String descripcion;
 
 
