@@ -1,9 +1,9 @@
 package com.bodypaint.feature.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record  ClienteRegisterRequestDto(
 
@@ -15,7 +15,7 @@ public record  ClienteRegisterRequestDto(
     @NotBlank String email,
 
     @NotBlank
-    @Min(8) String password,
+    @Size(min= 8) String password,
 
     @NotBlank String localidad,
 
@@ -23,7 +23,7 @@ public record  ClienteRegisterRequestDto(
 
     Integer piso,
 
-    Integer departamento
+    String departamento
 ) {
     
 }

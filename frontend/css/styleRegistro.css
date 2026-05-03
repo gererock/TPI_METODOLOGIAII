@@ -195,9 +195,7 @@ main {
     gap: 18px;
 }
 
-.fila-triple .campo:last-child {
-    grid-column: 1 / -1;
-}
+
 
 .campo-piso {
     max-width: 100%;

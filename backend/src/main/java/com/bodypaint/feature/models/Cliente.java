@@ -36,7 +36,7 @@ public class Cliente {
 
     private Integer piso;
 
-    private Integer departamento;
+    private String departamento;
 
 
 }

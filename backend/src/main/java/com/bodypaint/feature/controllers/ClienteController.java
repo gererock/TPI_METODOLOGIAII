@@ -1,5 +1,7 @@
 package com.bodypaint.feature.controllers;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +31,9 @@ public class ClienteController {
                 clienteRegisterService.registrar(dto)
             );
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body(
+                Map.of("mensaje", e.getMessage())
+            );
         }
     }
 }

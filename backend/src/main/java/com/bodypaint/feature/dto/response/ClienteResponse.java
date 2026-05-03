@@ -16,7 +16,7 @@ public record ClienteResponse(
 
     Integer piso,
 
-    Integer departamento
+    String departamento
 
 ) {
     
