@@ -1,17 +1,39 @@
 package com.bodypaint.feature.dto.request;
 
+import com.bodypaint.feature.models.Catalogos;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 public record ProductoCreateRequestDto(
 
-    @NotBlank(message="uno de los campos obligatorios esta incompleto.") String nombre,
-    @NotBlank(message="uno de los campos obligatorios esta incompleto.") String marca,
-    @NotNull(message="uno de los campos obligatorios esta incompleto.") @Positive(message="el campo de precio debe ser mayor a 0") Double precio,
-    @NotNull(message="uno de los campos obligatorios esta incompleto.") @Positive(message="el campo de stock debe ser mayor a 0") Integer stock,
-    @NotBlank(message="uno de los campos obligatorios esta incompleto.") String foto,
-    String descripcion
+    @NotBlank(message="El nombre es obligatorio ingresarlo.")
+    String nombre,
+
+    @NotBlank(message="La marca es obligatoria ingresarla.") 
+    String marca,
+
+    @NotNull(message="El precio es obligatorio ingresarlo.")
+    @Positive(message="el campo de precio debe ser mayor a 0") 
+    Double precio,
+
+    @NotNull(message="Stock es obligatorio ingresarlo.") 
+    @Positive(message="el campo de stock debe ser mayor a 0") 
+    Integer stock,
+
+    @NotBlank(message="Debe ingresar una url en foto obligatorio.")
+    @Pattern(
+        regexp = "^(http|https)://.*$",
+        message = "La foto debe ser una URL válida"
+    )
+    String foto,
+
+    String descripcion,
+
+    @NotNull(message="Debe ingresar Catalogo obligatorio.")
+    Catalogos catalogo
 
 ) {
 }

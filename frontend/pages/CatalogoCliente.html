@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BodyPaint — Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/frontend/css/catalogo.css"/>
+  <script src="/frontend/js/catalogo.js" defer></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="#" class="nav-logo">Body<span>Paint</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#" class="active">Catálogo</a></li>
+      <li><a href="#">Servicios</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-outline" onclick="window.location.href='/frontend/pages/Admin.html'">Cuenta Admin</button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Catálogo de Productos</p>
+      <h1 class="hero-title">Pinturas &amp;<br/>Materiales</h1>
+      <p class="hero-sub">Encontrá todo lo que necesitás para tu próximo proyecto.</p>
+    </div>
+  </section>
+
+  <!-- ════ TOOLBAR ════ -->
+  <section class="toolbar-section">
+    <div class="container">
+      <div class="search-wrap">
+        <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input id="search" class="search-input" type="text"
+               placeholder="Buscar por nombre o descripción…" autocomplete="off"/>
+        <button id="clear-btn" class="clear-btn" title="Limpiar">✕</button>
+      </div>
+
+      <!-- data-cat usa los valores del enum en mayúsculas -->
+      <div class="filters" id="filters">
+        <button class="chip active"  data-cat="all">Todos</button>
+        <button class="chip" data-cat="PINTURAS">Pinturas</button>
+        <button class="chip" data-cat="RODILLOS">Rodillos</button>
+        <button class="chip" data-cat="PINCELES">Pinceles</button>
+        <button class="chip" data-cat="HERRAMIENTAS">Herramientas</button>
+        <button class="chip" data-cat="PROTECCIONES">Protecciones</button>
+      </div>
+
+      <p class="result-count" id="result-count"></p>
+    </div>
+  </section>
+
+  <!-- ════ GRID ════ -->
+  <main class="container catalog-grid" id="catalog-grid"></main>
+
+  <!-- ════ PAGINATION ════ -->
+  <div class="container pagination" id="pagination"></div>
+
+  <!-- ════ MODAL ════ -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="modal">
+      <div class="modal-img-wrap">
+        <img id="modal-img" src="" alt=""/>
+        <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+        <span class="modal-badge" id="modal-badge"></span>
+      </div>
+      <div class="modal-body">
+        <p class="modal-cat"    id="modal-cat"></p>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-desc"   id="modal-desc"></p>
+        <div class="modal-footer">
+          <div class="modal-pricing">
+            <span class="modal-price" id="modal-price"></span>
+            <span class="modal-old"   id="modal-old"></span>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-outline" id="modal-close2">Cerrar</button>
+            <button class="btn-solid"   id="modal-add">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

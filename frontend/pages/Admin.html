@@ -1,65 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/frontend/css/CreateAdminProduct.css">
-    <link rel="stylesheet" href="/frontend/css/styleIndex.css">
-    <script src="/frontend/js/ApiAdmin.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BodyPaint — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/frontend/css/CreateAdminProduct.css">
+  <script src="/frontend/js/ApiAdmin.js" defer></script>
 </head>
 <body>
-    <main>
-        <h1><b>Administrador</b></h1>
 
-        <div class="admin-form-wrapper">
-            <div class="admin-form-card">
-          
-              <div class="admin-form-header">
-                <div class="admin-form-header-icon"><b>+</b></div>
-                <span><b>Crear producto</b></span>
-              </div>
-          
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <label>Nombre</label>
-                  <input type="text" id="nombre" required placeholder="Ej: Auriculares BT500" />
-                </div>
-                <div class="admin-form-group">
-                  <label>Marca</label>
-                  <input type="text" id="marca" required placeholder="Ej: Sony" />
-                </div>
-              </div>
-          
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <label>Precio</label>
-                  <div class="admin-price-wrapper">
-                    <span class="prefix">$</span>
-                    <input type="number" id="precio" required placeholder="1.00" min="1" />
-                  </div>
-                </div>
-                <div class="admin-form-group">
-                  <label>Stock</label>
-                  <input type="number" id="stock" required placeholder="1" min="1" />
-                </div>
-                <div class="admin-form-group" style="grid-column: span 2;">
-                  <label>Foto</label>
-                  <input type="text" id="foto" required placeholder="Ej: https://example.com/foto.jpg"/>
-                </div>
-              </div>
-          
-              <div class="admin-form-group admin-form-group--full">
-                <label>Descripción</label>
-                <textarea id="descripcion" placeholder="Descripción del producto..."></textarea>
-              </div>
-          
-              <div class="admin-form-actions">
-                <button id="btn-cancelar">Cancelar</button>
-                <button id="btn-crear-producto" type="button" class="btn-primary">Crear producto</button>
-              </div>
-          
+  <!-- ════ NAVBAR ════ -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">Body<span>Paint</span></a>
+    <ul class="nav-links">
+      <li><a href="#">Inicio</a></li>
+      <li><a href="/frontend/pages/catalogo.html">Catálogo</a></li>
+      <li><a href="#">Servicios</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-outline" onclick="window.location.href='/frontend/pages/CatalogoCliente.html'">← Ver Catálogo</button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Panel de Control</p>
+      <h1 class="hero-title">Administrador</h1>
+      <p class="hero-sub">Gestioná tu inventario de productos desde acá.</p>
+    </div>
+  </section>
+
+  <!-- ════ TABS BAR ════ -->
+  <div class="tabs-section">
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="crear">+ Crear producto</button>
+      <button class="tab-btn" data-tab="productos">Productos</button>
+    </div>
+  </div>
+
+  <!-- ════ CONTENT ════ -->
+  <div class="admin-content">
+    <div class="container">
+
+      <!-- ── PESTAÑA: CREAR PRODUCTO ── -->
+      <div class="tab-panel active" id="tab-crear">
+
+        <div class="section-header">
+          <div>
+            <div class="section-title">Nuevo producto</div>
+            <div class="section-sub">Completá los campos para agregar un producto al catálogo.</div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon">+</div>
+            <div>
+              <div class="form-card-title">Crear producto</div>
+              <div class="form-card-sub">Todos los campos marcados son obligatorios</div>
             </div>
           </div>
-    </main>
+
+          <div class="form-card-body">
+
+            <!-- Fila 1: Nombre / Marca -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="nombre">Nombre *</label>
+                <input class="form-input" type="text" id="nombre" placeholder="Ej: Pintura látex premium" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="marca">Marca *</label>
+                <input class="form-input" type="text" id="marca" placeholder="Ej: Sherwin-Williams" required />
+              </div>
+            </div>
+
+            <!-- Fila 2: Precio / Stock / Categoría -->
+            <div class="form-row form-row--3">
+              <div class="form-group">
+                <label class="form-label" for="precio">Precio *</label>
+                <div class="price-wrap">
+                  <span class="price-prefix">$</span>
+                  <input class="form-input" type="number" id="precio" placeholder="0.00" min="1" step="0.01" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="stock">Stock *</label>
+                <input class="form-input" type="number" id="stock" placeholder="1" min="1" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="categoria">Categoría *</label>
+                <div class="select-wrap">
+                  <select class="form-select" id="categoria" required>
+                    <option value="" disabled selected>Seleccioná…</option>
+                    <option value="PINTURAS">Pinturas</option>
+                    <option value="RODILLOS">Rodillos</option>
+                    <option value="PINCELES">Pinceles</option>
+                    <option value="HERRAMIENTAS">Herramientas</option>
+                    <option value="PROTECCIONES">Protecciones</option>
+                  </select>
+                  <span class="select-arrow">▼</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fila 3: Foto (ancho completo) -->
+            <div class="form-row form-row--full" style="margin-bottom:18px">
+              <div class="form-group">
+                <label class="form-label" for="foto">URL de foto *</label>
+                <input class="form-input" type="text" id="foto" placeholder="https://example.com/foto.jpg" required />
+              </div>
+            </div>
+
+            <!-- Fila 4: Descripción -->
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <textarea class="form-textarea" id="descripcion" placeholder="Descripción del producto…"></textarea>
+            </div>
+
+          </div><!-- /form-card-body -->
+
+          <div class="form-card-footer">
+            <button class="btn-outline" id="btn-cancelar" type="button">Cancelar</button>
+            <button class="btn-solid"   id="btn-crear-producto" type="button">Crear producto</button>
+          </div>
+        </div><!-- /form-card -->
+
+      </div><!-- /tab-crear -->
+
+      <!-- ── PESTAÑA: PRODUCTOS ── -->
+      <div class="tab-panel" id="tab-productos">
+
+        <div class="section-header">
+          <div>
+            <div class="section-title">Productos registrados</div>
+            <div class="section-sub">Listado completo de productos en el catálogo.</div>
+          </div>
+          <button class="btn-solid" id="btn-ir-crear">+ Agregar nuevo</button>
+        </div>
+
+        <div class="products-table-wrap">
+          <table class="products-table" id="products-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+              <tr class="empty-row">
+                <td colspan="5">No hay productos cargados aún.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /tab-productos -->
+
+    </div><!-- /container -->
+  </div><!-- /admin-content -->
+
+  <!-- ════ TOAST ════ -->
+  <div class="toast" id="toast"></div>
+
 </body>
 </html>

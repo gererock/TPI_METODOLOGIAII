@@ -1,7 +1,10 @@
 package com.bodypaint.feature.services.interfaces;
 
-import com.bodypaint.feature.dto.response.ProductoResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.bodypaint.feature.models.Producto;
 
 public interface IProductGetService {
-    ProductoResponseDto getProductoById(Long id);
+    Page<Producto> obtenerProductos(Pageable pageable);
 }

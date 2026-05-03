@@ -1,5 +1,7 @@
 package com.bodypaint.feature.controllers;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,16 +24,20 @@ public class ProductoCreateController {
     private final IProductCreateService servicioCreate;
 
     @PostMapping
-public ResponseEntity<String> create(@Valid @RequestBody ProductoCreateRequestDto dto) {
+public ResponseEntity<?> create(@Valid @RequestBody ProductoCreateRequestDto dto) {
     try{
 
         servicioCreate.cerate(dto);
-        return ResponseEntity.status(201).body("Producto creado");
+        return ResponseEntity.status(201).body(
+            Map.of("mensaje" ,"Producto creado")
+            );
         
     }
     catch(RuntimeException e){
 
-        return ResponseEntity.status(409).body(e.getMessage());
+        return ResponseEntity.status(400).body(
+            Map.of("mensaje", e.getMessage())
+            );
 
     }
 }
