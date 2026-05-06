@@ -96,20 +96,6 @@
                 <label class="form-label" for="stock">Stock *</label>
                 <input class="form-input" type="number" id="stock" placeholder="1" min="1" required />
               </div>
-              <div class="form-group">
-                <label class="form-label" for="categoria">Categoría *</label>
-                <div class="select-wrap">
-                  <select class="form-select" id="categoria" required>
-                    <option value="" disabled selected>Seleccioná…</option>
-                    <option value="PINTURAS">Pinturas</option>
-                    <option value="RODILLOS">Rodillos</option>
-                    <option value="PINCELES">Pinceles</option>
-                    <option value="HERRAMIENTAS">Herramientas</option>
-                    <option value="PROTECCIONES">Protecciones</option>
-                  </select>
-                  <span class="select-arrow">▼</span>
-                </div>
-              </div>
             </div>
 
             <!-- Fila 3: Foto (ancho completo) -->
@@ -153,14 +139,13 @@
               <tr>
                 <th>Nombre</th>
                 <th>Marca</th>
-                <th>Categoría</th>
                 <th>Precio</th>
                 <th>Stock</th>
               </tr>
             </thead>
             <tbody id="products-tbody">
               <tr class="empty-row">
-                <td colspan="5">No hay productos cargados aún.</td>
+                <td colspan="4">No hay productos cargados aún.</td>
               </tr>
             </tbody>
           </table>

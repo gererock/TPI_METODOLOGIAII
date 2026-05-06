@@ -1,7 +1,5 @@
 package com.bodypaint.feature.dto.request;
 
-import com.bodypaint.feature.models.Catalogos;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -30,10 +28,7 @@ public record ProductoCreateRequestDto(
     )
     String foto,
 
-    String descripcion,
-
-    @NotNull(message="Debe ingresar Catalogo obligatorio.")
-    Catalogos catalogo
+    String descripcion
 
 ) {
 }

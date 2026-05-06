@@ -7,8 +7,7 @@ public record ProductoResponseDto(
     Double precio,
     Integer stock,
     String foto,
-    String descripcion,
-    String catalogo
+    String descripcion
     
 ) {
 }

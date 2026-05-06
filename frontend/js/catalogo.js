@@ -1,42 +1,47 @@
 const API_URL = "http://localhost:8080";
 
 // ─── ESTADO ───────────────────────────────
-let query         = '';
-let activeCategory = 'all';
-let currentPage   = 1;
-let allProducts   = [];   // cache local para filtrado/búsqueda en frontend
-
-let backendData = {
-  content: [],
-  totalPages: 1,
-  totalElements: 0,
-  number: 0
-};
+let query        = '';
+let currentPage  = 1;
+let allProducts  = [];
 
 // ─── API ──────────────────────────────────
 async function fetchProductos(page = 0) {
-  const url = `${API_URL}/api/productos?page=${page}&size=100`;
-  const res  = await fetch(url);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_URL}/api/productos?page=${page}&size=100`);
 
-  backendData  = data;
-  allProducts  = data.content ?? [];
-  currentPage  = data.number + 1;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      // BaseResponse de error → "message"; handler genérico → "error"
+      throw new Error(err.message ?? err.error ?? `Error ${res.status}`);
+    }
+
+    const body = await res.json();   // BaseResponse<Page<?>>
+
+    /*
+     * body.data  → el objeto Page de Spring
+     * body.data.content → array de productos
+     * body.data.number  → página actual (0-indexed)
+     */
+    const pageData  = body.data ?? {};
+    allProducts     = pageData.content ?? [];
+    currentPage     = (pageData.number ?? 0) + 1;
+
+  } catch (e) {
+    console.error('[fetchProductos]', e);
+    showGridError(e.message);
+  }
 }
 
 // ─── FILTRADO LOCAL ───────────────────────
 function getFiltered() {
-  return allProducts.filter(p => {
-    const matchCat = activeCategory === 'all' ||
-                     (p.catalogo ?? '').toUpperCase() === activeCategory.toUpperCase();
+  const q = query.trim().toLowerCase();
+  if (!q) return allProducts;
 
-    const q = query.trim().toLowerCase();
-    const matchQ  = !q ||
-                    p.nombre.toLowerCase().includes(q) ||
-                    (p.descripcion ?? '').toLowerCase().includes(q);
-
-    return matchCat && matchQ;
-  });
+  return allProducts.filter(p =>
+    p.nombre.toLowerCase().includes(q) ||
+    (p.descripcion ?? '').toLowerCase().includes(q)
+  );
 }
 
 // ─── HELPERS ──────────────────────────────
@@ -56,22 +61,24 @@ function highlight(text, q) {
   );
 }
 
-function labelFromEnum(val) {
-  const map = {
-    PINTURAS:     'Pinturas',
-    RODILLOS:     'Rodillos',
-    PINCELES:     'Pinceles',
-    HERRAMIENTAS: 'Herramientas',
-    PROTECCIONES: 'Protecciones'
-  };
-  return map[(val ?? '').toUpperCase()] ?? val ?? '';
+// ─── ERROR EN GRID ────────────────────────
+function showGridError(msg) {
+  document.getElementById('catalog-grid').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">⚠️</div>
+      <p class="empty-title">Ocurrió un error</p>
+      <p class="empty-msg">${msg}</p>
+      <button class="empty-reset" onclick="location.reload()">Reintentar</button>
+    </div>`;
+  document.getElementById('pagination').innerHTML   = '';
+  document.getElementById('result-count').innerHTML = '';
 }
 
 // ─── RENDER ───────────────────────────────
 function render() {
-  const results  = getFiltered();
-  const grid     = document.getElementById('catalog-grid');
-  const countEl  = document.getElementById('result-count');
+  const results = getFiltered();
+  const grid    = document.getElementById('catalog-grid');
+  const countEl = document.getElementById('result-count');
 
   countEl.innerHTML = `<strong>${results.length}</strong> producto${results.length !== 1 ? 's' : ''}`;
 
@@ -80,26 +87,29 @@ function render() {
       <div class="empty-state">
         <div class="empty-icon">🔍</div>
         <p class="empty-title">Sin resultados</p>
-        <p class="empty-msg">No encontramos productos con ese filtro o búsqueda.</p>
-        <button class="empty-reset" onclick="resetFilters()">Limpiar filtros</button>
+        <p class="empty-msg">No encontramos productos con ese texto.</p>
+        <button class="empty-reset" onclick="resetSearch()">Limpiar búsqueda</button>
       </div>`;
     document.getElementById('pagination').innerHTML = '';
     return;
   }
 
   grid.innerHTML = results.map((p, i) => `
-    <div class="card" style="animation-delay:${i * 0.05}s" data-id="${p.id ?? i}" onclick="openModal(${allProducts.indexOf(p)})">
+    <div class="card" style="animation-delay:${i * 0.05}s"
+         data-id="${p.id ?? i}"
+         onclick="openModal(${allProducts.indexOf(p)})">
       <div class="card-img-wrap">
         <img class="card-img" src="${p.foto}" alt="${p.nombre}" loading="lazy"/>
-        <span class="card-badge">${labelFromEnum(p.catalogo)}</span>
       </div>
       <div class="card-body">
-        <p class="card-cat">${labelFromEnum(p.catalogo)}</p>
         <p class="card-name">${highlight(p.nombre, query)}</p>
         <p class="card-desc">${highlight(p.descripcion || '', query)}</p>
         <div class="card-footer">
           <span class="card-price">${formatPrice(p.precio)}</span>
-          <button class="card-btn" onclick="event.stopPropagation(); openModal(${allProducts.indexOf(p)})">Ver detalle</button>
+          <button class="card-btn"
+                  onclick="event.stopPropagation(); openModal(${allProducts.indexOf(p)})">
+            Ver detalle
+          </button>
         </div>
       </div>
     </div>
@@ -113,10 +123,8 @@ function openModal(index) {
   const p = allProducts[index];
   if (!p) return;
 
-  document.getElementById('modal-img').src        = p.foto ?? '';
-  document.getElementById('modal-img').alt        = p.nombre;
-  document.getElementById('modal-badge').textContent = labelFromEnum(p.catalogo);
-  document.getElementById('modal-cat').textContent   = labelFromEnum(p.catalogo);
+  document.getElementById('modal-img').src          = p.foto ?? '';
+  document.getElementById('modal-img').alt          = p.nombre;
   document.getElementById('modal-title').textContent = p.nombre;
   document.getElementById('modal-desc').textContent  = p.descripcion ?? 'Sin descripción.';
   document.getElementById('modal-price').textContent = formatPrice(p.precio);
@@ -136,17 +144,15 @@ document.getElementById('modal-close2').addEventListener('click', closeModal);
 document.getElementById('modal-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-overlay')) closeModal();
 });
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ─── RESET FILTROS ────────────────────────
-function resetFilters() {
-  query          = '';
-  activeCategory = 'all';
-  document.getElementById('search').value = '';
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  document.querySelector('.chip[data-cat="all"]').classList.add('active');
+// ─── RESET BÚSQUEDA ───────────────────────
+function resetSearch() {
+  query = '';
+  const input    = document.getElementById('search');
+  const clearBtn = document.getElementById('clear-btn');
+  if (input)    input.value           = '';
+  if (clearBtn) clearBtn.style.display = 'none';
   render();
 }
 
@@ -159,21 +165,7 @@ document.getElementById('search').addEventListener('input', e => {
 });
 
 document.getElementById('clear-btn')?.addEventListener('click', () => {
-  query = '';
-  document.getElementById('search').value = '';
-  document.getElementById('clear-btn').style.display = 'none';
-  render();
-});
-
-// ─── FILTROS ──────────────────────────────
-document.getElementById('filters').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if (!chip) return;
-
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  activeCategory = chip.dataset.cat;
-  render();
+  resetSearch();
 });
 
 // ─── ARRANQUE ─────────────────────────────

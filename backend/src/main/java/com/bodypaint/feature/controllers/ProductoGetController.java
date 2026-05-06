@@ -1,7 +1,5 @@
 package com.bodypaint.feature.controllers;
 
-import java.util.Map;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bodypaint.feature.Config.BaseResponse;
 import com.bodypaint.feature.services.interfaces.IProductGetService;
 
 import lombok.AllArgsConstructor;
@@ -29,17 +28,11 @@ public class ProductoGetController {
             @RequestParam(defaultValue = "8") int size
     ) {
 
-        try {
-
             Page<?> productos = getService.obtenerProductos(PageRequest.of(page, size));
-    
-            return ResponseEntity.ok(productos);
-    
-        } catch (RuntimeException e) {
-    
-            return ResponseEntity.status(400).body(
-                Map.of("mensaje", e.getMessage())
+        
+            return ResponseEntity.status(200).body(
+                BaseResponse.ok(productos, "Productos encontrados correctamente")
             );
-        }
+
     }
 }
