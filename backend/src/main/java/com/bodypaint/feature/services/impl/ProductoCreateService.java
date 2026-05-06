@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.bodypaint.feature.Config.errors.ProductoYaExisteException;
 import com.bodypaint.feature.dto.request.ProductoCreateRequestDto;
 import com.bodypaint.feature.mapper.ProductMapper;
 import com.bodypaint.feature.models.Producto;
@@ -28,7 +29,7 @@ public class ProductoCreateService implements IProductCreateService{
 
         if (productoEncontrado.isPresent() && productoEncontrado.get().getMarca().equals(producto.getMarca())) {
         
-        throw new RuntimeException("Ya existe un producto con esas caracteristicas");
+            throw new ProductoYaExisteException("Ya existe un producto con esas características");
     }
 
         productoRepository.save(producto);

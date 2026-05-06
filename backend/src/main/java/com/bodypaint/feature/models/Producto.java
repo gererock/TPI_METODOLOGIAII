@@ -1,8 +1,6 @@
 package com.bodypaint.feature.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,9 +33,5 @@ public class Producto {
     private String foto;
 
     private String descripcion;
-
-    @Enumerated(EnumType.STRING)
-    private Catalogos catalogo;
-
-
+    
 }

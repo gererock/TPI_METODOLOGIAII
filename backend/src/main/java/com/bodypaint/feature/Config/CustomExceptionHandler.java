@@ -9,6 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.bodypaint.feature.Config.errors.NotFoundException;
+import com.bodypaint.feature.Config.errors.ProductoYaExisteException;
+
 @RestControllerAdvice
 public class CustomExceptionHandler {
     
@@ -31,7 +34,7 @@ public class CustomExceptionHandler {
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", 400);
-        response.put("message", mainMessage); // 👈 ahora es dinámico
+        response.put("message", mainMessage);
         response.put("errors", fieldErrors);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -44,5 +47,23 @@ public class CustomExceptionHandler {
         error.put("error", ex.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ProductoYaExisteException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicate(ProductoYaExisteException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 409);
+        response.put("message", ex.getMessage());
+        response.put("errors", null);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+    
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(NotFoundException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 404);
+        response.put("message", ex.getMessage());
+        response.put("errors", null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

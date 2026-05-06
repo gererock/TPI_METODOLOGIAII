@@ -168,7 +168,7 @@
       gap: 18px;
       margin-bottom: 18px;
     }
-    .form-row--3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-row--3 { grid-template-columns: 1fr 1fr; }
     .form-row--full { grid-template-columns: 1fr; }
 
     .form-group { display: flex; flex-direction: column; gap: 7px; }
