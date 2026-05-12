@@ -1,6 +1,11 @@
 package com.bodypaint.feature.models;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,29 +16,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Table(name="pedidos")
 @Builder
-@Table(name="productos")
-public class Producto {
-
+public class Pedido {
+    
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
+    private Map<Long, Integer> productos;
 
-    private String marca;
+    private LocalDate fechaDePedido;
 
-    private Double precio;
+    @Enumerated(EnumType.STRING)
+    private EstadoPedido estado;
 
-    private Integer stock;
+    private Double total;
 
-    private String foto;
-
-    private String descripcion;
-
-    private Boolean sinStock;
-    
+    private Long id_cliente;
 }

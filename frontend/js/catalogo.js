@@ -80,9 +80,24 @@ function resaltarTexto(texto, textoBusqueda) {
     return textoSeguro;
   }
 
+<<<<<<< HEAD
   return textoSeguro.replace(
     new RegExp(`(${escaparRegex(escaparHtml(terminoNormalizado))})`, "gi"),
     '<span class="hl">$1</span>',
+=======
+// ─── FILTRADO LOCAL ───────────────────────
+function getFiltered() {
+  const q = query.trim().toLowerCase();
+  
+  // Filtrar primero los que tienen stock
+  const inStock = allProducts.filter(p => !p.sinStock);
+  
+  if (!q) return inStock;
+
+  return inStock.filter(p =>
+    p.nombre.toLowerCase().includes(q) ||
+    (p.descripcion ?? '').toLowerCase().includes(q)
+>>>>>>> 0a98324 (Mis cambios locales)
   );
 }
 
