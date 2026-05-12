@@ -2,49 +2,50 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BodyPaint — Registro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/frontend/css/styleRegistro.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BodyPaint - Registro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/frontend/css/styleRegistro.css" />
   <script src="/frontend/js/RegistrarClienteApi.js" defer></script>
 </head>
 <body>
-
-  <!-- ════ NAVBAR ════ -->
+  <!-- Navbar de acceso a registro e inicio de sesion -->
   <nav class="navbar">
     <a href="#" class="nav-logo">Body<span>Paint</span></a>
     <ul class="nav-links">
       <li><a href="#">Inicio</a></li>
-      <li><a href="/frontend/pages/catalogo.html">Catálogo</a></li>
+      <li><a href="/frontend/pages/CatalogoCliente.html">Cat&aacute;logo</a></li>
       <li><a href="#">Servicios</a></li>
       <li><a href="#">Contacto</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="btn-outline" onclick="window.location.href='/frontend/pages/Login.html'">Iniciar sesión</button>
+      <a class="btn-outline" href="/frontend/pages/Login.html">Iniciar sesi&oacute;n</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Menú">
+    <button class="hamburger" id="hamburger" type="button" aria-label="Men&uacute;">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- ════ HERO ════ -->
+  <!-- Hero introductorio del registro -->
   <section class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-eyebrow">Bienvenido</p>
       <h1 class="hero-title">Crear cuenta</h1>
-      <p class="hero-sub">Registrate para acceder al catálogo completo.</p>
+      <p class="hero-sub">Registrate para acceder al cat&aacute;logo completo.</p>
     </div>
   </section>
 
-  <!-- ════ FORM SECTION ════ -->
+  <!-- Formulario principal de alta de cliente -->
   <section class="form-section">
     <div class="container">
-
       <div class="form-card">
         <div class="form-card-header">
-          <div class="form-card-icon">✦</div>
+          <div class="form-card-icon">&#10022;</div>
           <div>
             <div class="form-card-title">Nueva cuenta</div>
             <div class="form-card-sub">Todos los campos marcados son obligatorios</div>
@@ -53,8 +54,6 @@
 
         <div class="form-card-body">
           <form class="registro-form" id="registro-form" novalidate>
-
-            <!-- Fila 1: Nombre / Apellido -->
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="nombre">Nombre *</label>
@@ -62,11 +61,10 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="apellido">Apellido *</label>
-                <input class="form-input" type="text" id="apellido" placeholder="Pérez" required />
+                <input class="form-input" type="text" id="apellido" placeholder="P&eacute;rez" required />
               </div>
             </div>
 
-            <!-- Fila 2: Email / DNI -->
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="email">Email *</label>
@@ -78,37 +76,34 @@
               </div>
             </div>
 
-            <!-- Contraseña -->
             <div class="form-group">
-              <label class="form-label" for="password">Contraseña *</label>
+              <label class="form-label" for="password">Contrase&ntilde;a *</label>
               <div class="input-pass-wrap">
-                <input class="form-input" type="password" id="password" placeholder="Mínimo 8 caracteres" required />
-                <button type="button" class="toggle-pass" id="button-password" aria-label="Mostrar contraseña">
+                <input class="form-input" type="password" id="password" placeholder="M&iacute;nimo 8 caracteres" required />
+                <button type="button" class="toggle-pass" id="button-password" aria-label="Mostrar contrase&ntilde;a">
                   <svg id="ico-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
                   </svg>
-                  <svg id="ico-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="display:none">
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
-                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  <svg id="ico-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
                   </svg>
                 </button>
               </div>
             </div>
 
-            <!-- Fila 3: Provincia / Localidad -->
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="provincia">Provincia *</label>
-                <input class="form-input" type="text" id="provincia" placeholder="Córdoba" required />
+                <input class="form-input" type="text" id="provincia" placeholder="C&oacute;rdoba" required />
               </div>
               <div class="form-group">
                 <label class="form-label" for="localidad">Localidad *</label>
-                <input class="form-input" type="text" id="localidad" placeholder="Ciudad" required/>
+                <input class="form-input" type="text" id="localidad" placeholder="Ciudad" required />
               </div>
             </div>
 
-            <!-- Fila 4: Piso / Departamento -->
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="piso">
@@ -117,25 +112,23 @@
                 <input class="form-input" type="number" id="piso" min="1" placeholder="Ej: 3" />
               </div>
               <div class="form-group">
-                <label class="form-label" for="departamento">Departamento<span class="label-optional">(opcional)</span></label>
-                <input class="form-input" type="text" id="departamento" placeholder="A"  />
+                <label class="form-label" for="departamento">
+                  Departamento <span class="label-optional">(opcional)</span>
+                </label>
+                <input class="form-input" type="text" id="departamento" placeholder="A" />
               </div>
             </div>
-
           </form>
-        </div><!-- /form-card-body -->
+        </div>
 
         <div class="form-card-footer">
-          <p class="login-link">¿Ya tenés cuenta? <a href="/frontend/pages/Login.html">Iniciá sesión</a></p>
+          <p class="login-link">&iquest;Ya ten&eacute;s cuenta? <a href="/frontend/pages/Login.html">Inici&aacute; sesi&oacute;n</a></p>
           <button class="btn-solid" id="btn-registrar" type="button">Crear cuenta</button>
         </div>
-      </div><!-- /form-card -->
-
-    </div><!-- /container -->
+      </div>
+    </div>
   </section>
 
-  <!-- ════ TOAST ════ -->
   <div class="toast" id="toast"></div>
-
 </body>
 </html>
