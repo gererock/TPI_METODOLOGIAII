@@ -3,6 +3,8 @@ package com.bodypaint.feature.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.bodypaint.feature.Config.errors.NotFoundException;
 import com.bodypaint.feature.dto.response.ProductoResponseDto;
 import com.bodypaint.feature.mapper.ProductMapper;
@@ -11,7 +13,7 @@ import com.bodypaint.feature.repository.IProductoRepository;
 
 import lombok.AllArgsConstructor;
 
-
+@Component
 @AllArgsConstructor
 public class BuscarProductoPorPedido {
 

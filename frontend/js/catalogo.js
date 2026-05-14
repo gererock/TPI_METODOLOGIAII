@@ -67,6 +67,7 @@ function escaparHtml(valor) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+<<<<<<< HEAD
 
 function escaparRegex(valor) {
   return valor.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -98,6 +99,24 @@ function getFiltered() {
     p.nombre.toLowerCase().includes(q) ||
     (p.descripcion ?? '').toLowerCase().includes(q)
 >>>>>>> 0a98324 (Mis cambios locales)
+=======
+
+function escaparRegex(valor) {
+  return valor.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function resaltarTexto(texto, textoBusqueda) {
+  const textoSeguro = escaparHtml(texto);
+  const terminoNormalizado = textoBusqueda.trim();
+
+  if (!terminoNormalizado) {
+    return textoSeguro;
+  }
+
+  return textoSeguro.replace(
+    new RegExp(`(${escaparRegex(escaparHtml(terminoNormalizado))})`, "gi"),
+    '<span class="hl">$1</span>',
+>>>>>>> 99dc3fa (cambios git frontend y backend(no me deja cambiar de rama))
   );
 }
 

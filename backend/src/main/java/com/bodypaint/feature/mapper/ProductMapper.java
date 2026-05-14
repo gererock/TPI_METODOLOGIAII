@@ -23,7 +23,8 @@ public class ProductMapper {
 
     public static ProductoResponseDto toResponse(Producto p){
 
-        return new ProductoResponseDto(p.getNombre(), 
+        return new ProductoResponseDto(p.getId(), 
+                                        p.getNombre(), 
                                         p.getMarca(), 
                                         p.getPrecio(), 
                                         p.getStock(), 
