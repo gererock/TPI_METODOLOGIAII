@@ -12,11 +12,8 @@ import {
 const URL_PAGINA_CATALOGO = "/frontend/pages/CatalogoCliente.html";
 const DURACION_ANIMACION_PAGO_MS = 180;
 const URL_API = "http://localhost:8080";
-<<<<<<< HEAD
-const URL_CREAR_PEDIDO = `${URL_API}/api/pedidos`;
-=======
 const URL_CREAR_PEDIDO = `${URL_API}/api/pedidos/generar`;
->>>>>>> 99dc3fa (cambios git frontend y backend(no me deja cambiar de rama))
+
 
 // Estado de esta pantalla y referencias del modal de pago.
 const estado = {
@@ -163,11 +160,7 @@ async function enviarPedidoAlBackend() {
   const productos = construirDiccionarioProductosPedido();
   const idCliente = obtenerClienteId();
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 99dc3fa (cambios git frontend y backend(no me deja cambiar de rama))
   if (!idCliente) {
     throw new Error("No se encontro el cliente que realiza el pedido.");
   }
@@ -190,11 +183,9 @@ async function enviarPedidoAlBackend() {
     const mensaje = data.message ?? data.error ?? `Error ${respuesta.status}`;
     throw new Error(mensaje);
   }
-<<<<<<< HEAD
 
-=======
   alert(data.message)
->>>>>>> 99dc3fa (cambios git frontend y backend(no me deja cambiar de rama))
+
   return data;
 }
 // Eventos del resumen y del modal de pago en efectivo.
