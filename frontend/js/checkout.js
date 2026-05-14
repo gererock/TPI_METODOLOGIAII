@@ -1,7 +1,7 @@
 import {
   construirResumenCarrito,
-  finalizarPagoEnEfectivo,
   suscribirseAlCarrito,
+  vaciarCarrito,
 } from "/frontend/js/cart-store.js";
 import {
   formatearPrecio,
@@ -11,6 +11,8 @@ import {
 // Rutas y tiempos de animacion del checkout.
 const URL_PAGINA_CATALOGO = "/frontend/pages/CatalogoCliente.html";
 const DURACION_ANIMACION_PAGO_MS = 180;
+const URL_API = "http://localhost:8080";
+const URL_CREAR_PEDIDO = `${URL_API}/api/pedidos`;
 
 // Estado de esta pantalla y referencias del modal de pago.
 const estado = {
@@ -125,7 +127,63 @@ async function cargarProductos() {
 
   renderizarCheckout();
 }
+function obtenerClienteId() {
+  const clienteGuardado = localStorage.getItem("cliente");
 
+  if (!clienteGuardado) {
+    return null;
+  }
+
+  try {
+    const cliente = JSON.parse(clienteGuardado);
+    return cliente.id ?? cliente.idCliente ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function construirDiccionarioProductosPedido() {
+  const resumen = construirResumenCarrito(estado.productos);
+
+  const productos = {};
+
+  resumen.productos.forEach((producto) => {
+    productos[producto.idProducto] = producto.cantidad;
+  });
+
+  return productos;
+}
+
+async function enviarPedidoAlBackend() {
+  const resumen = construirResumenCarrito(estado.productos);
+  const productos = construirDiccionarioProductosPedido();
+  const idCliente = obtenerClienteId();
+
+  if (!idCliente) {
+    throw new Error("No se encontro el cliente que realiza el pedido.");
+  }
+
+  const pedido = {
+    idCliente: idCliente,
+    total: resumen.total,
+    productos: productos,
+  };
+
+  const respuesta = await fetch(URL_CREAR_PEDIDO, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pedido),
+  });
+
+  const data = await respuesta.json().catch(() => ({}));
+
+  if (!respuesta.ok) {
+    const mensaje = data.message ?? data.error ?? `Error ${respuesta.status}`;
+    throw new Error(mensaje);
+  }
+
+  return data;
+}
 // Eventos del resumen y del modal de pago en efectivo.
 function vincularEventos() {
   elementos.botonPagarEfectivo.addEventListener("click", () => {
@@ -136,18 +194,34 @@ function vincularEventos() {
 
   elementos.botonCancelarPago.addEventListener("click", () => cerrarModalPago());
 
-  elementos.botonFinalizarPago.addEventListener("click", () => {
-    const resultado = finalizarPagoEnEfectivo(estado.productos);
+elementos.botonFinalizarPago.addEventListener("click", async () => {
+  const resumen = construirResumenCarrito(estado.productos);
 
-    if (!resultado.ok) {
-      cerrarModalPago();
-      renderizarCheckout();
-      return;
-    }
+  if (!resumen.productos.length) {
+    cerrarModalPago();
+    renderizarCheckout();
+    return;
+  }
+
+
+  try {
+    elementos.botonFinalizarPago.disabled = true;
+    elementos.botonFinalizarPago.textContent = "Procesando...";
+
+    await enviarPedidoAlBackend();
+
+    vaciarCarrito();
 
     cerrarModalPago(true);
     window.location.href = URL_PAGINA_CATALOGO;
-  });
+  } catch (error) {
+    console.error("[checkout] No se pudo crear el pedido.", error);
+    alert(`No se pudo finalizar el pedido: ${error.message}`);
+  } finally {
+    elementos.botonFinalizarPago.disabled = false;
+    elementos.botonFinalizarPago.textContent = "Pago finalizado";
+  }
+});
 
   elementos.overlayPago.addEventListener("click", (evento) => {
     if (evento.target === elementos.overlayPago) {

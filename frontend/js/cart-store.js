@@ -64,8 +64,7 @@ export function obtenerItemsCarrito() {
 }
 
 export function obtenerCantidadComprada(idProducto) {
-  const stockComprado = obtenerStockCompradoInterno();
-  return normalizarCantidad(stockComprado[String(idProducto)]);
+  return 0;
 }
 
 export function obtenerCantidadEnCarrito(idProducto) {
@@ -159,6 +158,10 @@ export function quitarProductoDelCarrito(idProducto) {
   );
 
   guardarItemsCarritoInternos(itemsCarrito);
+  emitirActualizacionCarrito();
+}
+export function vaciarCarrito() {
+  guardarItemsCarritoInternos([]);
   emitirActualizacionCarrito();
 }
 
