@@ -58,7 +58,8 @@ const elementos = {
   botonAgregarModal: document.getElementById("modal-add"),
 };
 
-// Helpers de texto para pintar contenido seguro dentro del HTML.
+// ─── HELPERS DE TEXTO ─────────────────────────────────────────────────────────
+
 function escaparHtml(valor) {
   return String(valor ?? "")
     .replace(/&/g, "&amp;")
@@ -68,37 +69,6 @@ function escaparHtml(valor) {
     .replace(/'/g, "&#39;");
 }
 
-
-function escaparRegex(valor) {
-  return valor.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function resaltarTexto(texto, textoBusqueda) {
-  const textoSeguro = escaparHtml(texto);
-  const terminoNormalizado = textoBusqueda.trim();
-
-  if (!terminoNormalizado) {
-    return textoSeguro;
-  }
-
-
-  return textoSeguro.replace(
-    new RegExp(`(${escaparRegex(escaparHtml(terminoNormalizado))})`, "gi"),
-    '<span class="hl">$1</span>',)
-  }
-// ─── FILTRADO LOCAL ───────────────────────
-function getFiltered() {
-  const q = query.trim().toLowerCase();
-  
-  // Filtrar primero los que tienen stock
-  const inStock = allProducts.filter(p => !p.sinStock);
-  
-  if (!q) return inStock;
-
-  return inStock.filter(p =>
-    p.nombre.toLowerCase().includes(q) ||
-    (p.descripcion ?? '').toLowerCase().includes(q))
-  }
 function escaparRegex(valor) {
   return valor.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -117,15 +87,21 @@ function resaltarTexto(texto, textoBusqueda) {
   );
 }
 
-// Utilidades de busqueda y de borradores de cantidad.
+// ─── FILTRADO LOCAL ───────────────────────────────────────────────────────────
+
 function obtenerProductosFiltrados() {
   const terminoBusqueda = estado.textoBusqueda.trim().toLowerCase();
 
+  // Solo mostramos productos con stock disponible
+  const conStock = estado.productos.filter(
+    (producto) => obtenerStockDisponible(producto) > 0,
+  );
+
   if (!terminoBusqueda) {
-    return estado.productos;
+    return conStock;
   }
 
-  return estado.productos.filter((producto) => {
+  return conStock.filter((producto) => {
     const textoProducto = [
       producto.nombre,
       producto.marca,
@@ -139,16 +115,22 @@ function obtenerProductosFiltrados() {
   });
 }
 
+// ─── UTILIDADES DE BUSQUEDA Y BORRADORES ─────────────────────────────────────
+
 function buscarProductoPorId(idProducto) {
-  return estado.productos.find(
-    (producto) => obtenerIdProducto(producto) === String(idProducto),
-  ) ?? null;
+  return (
+    estado.productos.find(
+      (producto) => obtenerIdProducto(producto) === String(idProducto),
+    ) ?? null
+  );
 }
 
 function obtenerProductoResumenCarrito(idProducto) {
-  return construirResumenCarrito(estado.productos).productos.find(
-    (producto) => producto.idProducto === String(idProducto),
-  ) ?? null;
+  return (
+    construirResumenCarrito(estado.productos).productos.find(
+      (producto) => producto.idProducto === String(idProducto),
+    ) ?? null
+  );
 }
 
 function normalizarCantidadQuitar(valor, cantidadMaxima) {
@@ -217,7 +199,8 @@ function actualizarVisibilidadBotonLimpiar() {
   elementos.botonLimpiarBusqueda.style.display = estado.textoBusqueda ? "block" : "none";
 }
 
-// Estados vacios y mensajes generales del catalogo.
+// ─── ESTADOS VACIOS ───────────────────────────────────────────────────────────
+
 function crearEstadoVacio(icono, titulo, mensaje, mostrarBotonReinicio = false) {
   return `
     <div class="empty-state">
@@ -242,7 +225,8 @@ function mostrarErrorGrilla(mensaje) {
   );
 }
 
-// Render principal de tarjetas del catalogo.
+// ─── RENDER DEL CATALOGO ──────────────────────────────────────────────────────
+
 function renderizarCatalogo() {
   const productosFiltrados = obtenerProductosFiltrados();
 
@@ -306,7 +290,8 @@ function renderizarCatalogo() {
     .join("");
 }
 
-// Render del carrito flotante que se abre desde la navbar.
+// ─── RENDER DEL CARRITO ───────────────────────────────────────────────────────
+
 function renderizarCarrito() {
   const resumen = construirResumenCarrito(estado.productos);
 
@@ -442,7 +427,8 @@ function renderizarCarrito() {
     .join("");
 }
 
-// Sincroniza el modal de detalle con el producto activo y el stock real.
+// ─── MODAL DE PRODUCTO ────────────────────────────────────────────────────────
+
 function sincronizarModalProducto() {
   if (!estado.idProductoActivo) {
     return;
@@ -465,10 +451,12 @@ function sincronizarModalProducto() {
   elementos.descripcionModal.textContent =
     producto.descripcion || "Sin descripcion disponible.";
   elementos.precioModal.textContent = formatearPrecio(producto.precio);
-  elementos.stockModal.textContent = stockDisponible === 0
-    ? "Sin stock"
-    : `Disponible: ${stockDisponible} ${stockDisponible === 1 ? "unidad" : "unidades"}`;
-  elementos.stockModal.className = stockDisponible === 0 ? "modal-stock is-empty" : "modal-stock";
+  elementos.stockModal.textContent =
+    stockDisponible === 0
+      ? "Sin stock"
+      : `Disponible: ${stockDisponible} ${stockDisponible === 1 ? "unidad" : "unidades"}`;
+  elementos.stockModal.className =
+    stockDisponible === 0 ? "modal-stock is-empty" : "modal-stock";
   elementos.inputCantidadModal.max = String(Math.max(stockDisponible, 1));
   elementos.inputCantidadModal.value = String(estado.cantidadBorradorAgregar);
   elementos.inputCantidadModal.disabled = stockDisponible === 0;
@@ -512,7 +500,8 @@ function cerrarModalProducto(inmediato = false) {
   }, DURACION_ANIMACION_MODAL_MS);
 }
 
-// Apertura y cierre del panel del carrito en la misma pagina.
+// ─── PANEL DEL CARRITO ────────────────────────────────────────────────────────
+
 function abrirPanelCarrito() {
   window.clearTimeout(estado.temporizadorCierreCarrito);
   estado.carritoAbierto = true;
@@ -544,13 +533,16 @@ function alternarPanelCarrito() {
   abrirPanelCarrito();
 }
 
-// Recarga visual del catalogo cuando cambia la busqueda.
+// ─── BUSQUEDA ─────────────────────────────────────────────────────────────────
+
 function reiniciarBusqueda() {
   estado.textoBusqueda = "";
   elementos.inputBusqueda.value = "";
   actualizarVisibilidadBotonLimpiar();
   renderizarCatalogo();
 }
+
+// ─── CARGA DE PRODUCTOS ───────────────────────────────────────────────────────
 
 async function cargarProductos() {
   try {
@@ -567,7 +559,8 @@ async function cargarProductos() {
   }
 }
 
-// Interacciones del usuario sobre tarjetas, carrito y modal.
+// ─── MANEJADORES DE EVENTOS ───────────────────────────────────────────────────
+
 function manejarInteraccionGrilla(evento) {
   const tarjeta = evento.target.closest(".card");
   if (!tarjeta) {
@@ -676,7 +669,8 @@ function manejarInputCantidadModal() {
   sincronizarModalProducto();
 }
 
-// Registro de eventos principales de la pantalla.
+// ─── REGISTRO DE EVENTOS ──────────────────────────────────────────────────────
+
 function vincularEventos() {
   elementos.inputBusqueda.addEventListener("input", (evento) => {
     estado.textoBusqueda = evento.target.value;
@@ -758,8 +752,8 @@ function vincularEventos() {
 
     const recorridoClick = evento.composedPath();
     const clickDentroCarrito =
-      recorridoClick.includes(elementos.panelCarrito)
-      || recorridoClick.includes(elementos.botonCarrito);
+      recorridoClick.includes(elementos.panelCarrito) ||
+      recorridoClick.includes(elementos.botonCarrito);
 
     if (!clickDentroCarrito) {
       cerrarPanelCarrito();
@@ -772,6 +766,8 @@ function vincularEventos() {
     }
   });
 }
+
+// ─── INICIO ───────────────────────────────────────────────────────────────────
 
 function iniciar() {
   vincularEventos();

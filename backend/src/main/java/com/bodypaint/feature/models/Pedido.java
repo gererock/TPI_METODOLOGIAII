@@ -1,7 +1,6 @@
 package com.bodypaint.feature.models;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.persistence.CollectionTable;
@@ -40,7 +39,7 @@ public class Pedido {
     )
     @MapKeyColumn(name = "producto_id")
     @Column(name = "cantidad")
-    private Map<Long, Integer> productos = new HashMap<>();
+    private Map<Long, Integer> productos;
 
     private LocalDate fechaDePedido;
 
