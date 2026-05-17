@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BodyPaint - Vendedor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap"
+    rel="stylesheet"
+  />
+<link rel="stylesheet" href="/frontend/css/VendedorPedidos.css">
+</head>
+<body>
+ 
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">Body<span>Paint</span></a>
+    <ul class="nav-links">
+      <li><a href="/frontend/index.html">Inicio</a></li>
+      <li><a href="/frontend/pages/CatalogoCliente.html">Catálogo</a></li>
+      <li><a href="/frontend/pages/Admin.html">Admin</a></li>
+      <li><a href="#" class="active">Vendedor</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Panel de gestión</p>
+      <h1 class="hero-title">Vendedor</h1>
+      <p class="hero-sub">Gestioná todos los pedidos, cambiá estados y revisá el detalle de cada orden.</p>
+    </div>
+  </section>
+ 
+  <!-- Contenido -->
+  <div class="vendedor-content">
+    <div class="container">
+ 
+      <!-- Stats bar -->
+      <div class="stats-bar" id="stats-bar" style="display:none">
+        <div class="stat-chip">
+          <span class="stat-label">Total pedidos</span>
+          <span class="stat-value" id="stat-total">0</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">En proceso</span>
+          <span class="stat-value" id="stat-proceso" style="color:#6fd0e0">0</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">Entregados</span>
+          <span class="stat-value" id="stat-entregado" style="color:#6ee7a0">0</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-label">Cancelados</span>
+          <span class="stat-value" id="stat-cancelado" style="color:#f87171">0</span>
+        </div>
+      </div>
+ 
+      <!-- Header -->
+      <div class="section-header">
+        <div>
+          <div class="section-title">Todos los pedidos</div>
+          <div class="section-sub">Hacé clic en un pedido para ver el detalle y cambiar el estado.</div>
+        </div>
+        <button class="btn-solid" id="btn-recargar" type="button">⟳ Recargar</button>
+      </div>
+ 
+      <!-- Tabla de pedidos -->
+      <div class="orders-table-wrap">
+        <div class="loading-state" id="loading-state">
+          <div class="spinner"></div>
+          <p>Cargando pedidos...</p>
+        </div>
+ 
+        <table class="orders-table" id="orders-table" style="display:none">
+          <thead>
+            <tr>
+              <th style="width:44px"></th>
+              <th># Pedido</th>
+              <th>Cliente ID</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Productos</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+ 
+        <div class="empty-state" id="empty-state" style="display:none">
+          <div class="empty-ico">📦</div>
+          <p>No hay pedidos registrados aún.</p>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <div class="toast" id="toast"></div>
+ 
+  <script src="/frontend/js/VendedorPedido.js"></script>
+</body>
+</html>
