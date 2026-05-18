@@ -49,4 +49,7 @@ public class Pedido {
     private Double total;
 
     private Long id_cliente;
+
+    @Column(name = "motivo_cancelacion", length = 500)
+    private String motivoCancelacion;
 }

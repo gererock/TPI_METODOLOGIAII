@@ -19,10 +19,10 @@ public class CancelarPedido {
     private final IProductoRepository productoRepository;
     private final IPedidoRepository pedidoRepository;
 
-    public void cancelarPedido(Pedido pedido, Map<Long,Integer> map){
-
+    public void cancelarPedido(Pedido pedido, Map<Long,Integer> map, String motivoCancelacion){
 
         pedido.setEstado(EstadoPedido.CANCELADO);
+        pedido.setMotivoCancelacion(motivoCancelacion);
 
         pedidoRepository.save(pedido);
 

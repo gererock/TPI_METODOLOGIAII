@@ -67,8 +67,9 @@ public class PedidoController {
         @RequestBody Map<String, String> body
     ) {
         String nuevoEstado = body.get("estado");
+        String motivoCancelacion = body.get("motivoCancelacion");
         return ResponseEntity.ok().body(
-            BaseResponse.ok(estadoService.cambiarEstado(id, nuevoEstado), "Estado actualizado con exito")
+            BaseResponse.ok(estadoService.cambiarEstado(id, nuevoEstado, motivoCancelacion), "Estado actualizado con exito")
         );
     }
     

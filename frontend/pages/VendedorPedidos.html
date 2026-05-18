@@ -99,7 +99,30 @@
   </div>
  
   <div class="toast" id="toast"></div>
- 
+
+  <!-- Modal: motivo de cancelación -->
+  <div class="modal-overlay" id="modal-cancelacion" style="display:none">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <span class="modal-ico">&#128683;</span>
+        <h2 class="modal-title" id="modal-title">Cancelar pedido</h2>
+      </div>
+      <p class="modal-desc">Ingresá el motivo de la cancelación. Este campo es <strong>obligatorio</strong> y quedará registrado en el pedido.</p>
+      <textarea
+        id="modal-motivo"
+        class="modal-textarea"
+        placeholder="Ej: El cliente solicitó la cancelación por cambio de domicilio..."
+        maxlength="500"
+        rows="4"
+      ></textarea>
+      <p class="modal-error" id="modal-error" style="display:none"></p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="modal-cancel" type="button">Volver</button>
+        <button class="btn-modal-confirm" id="modal-confirm" type="button">&#128683; Confirmar cancelación</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/frontend/js/VendedorPedido.js"></script>
 </body>
 </html>

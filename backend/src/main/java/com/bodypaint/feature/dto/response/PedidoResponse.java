@@ -11,7 +11,8 @@ public record PedidoResponse(
     EstadoPedido estadoPedido,
     Double total,
     Long id_cliente,
-    LocalDate fechaDePedido
+    LocalDate fechaDePedido,
+    String motivoCancelacion
 ) {
     // Record auxiliar para representar cada linea del pedido
     // (producto + cantidad) como objeto plano, evitando el problema

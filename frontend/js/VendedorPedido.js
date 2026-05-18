@@ -9,7 +9,47 @@ const URL_API = "http://localhost:8080";
     const $statsBar  = document.getElementById("stats-bar");
     const $toast     = document.getElementById("toast");
     const $btnReload = document.getElementById("btn-recargar");
- 
+
+    // ── Modal cancelación ──────────────────────────────────────────
+    const $modal         = document.getElementById("modal-cancelacion");
+    const $modalMotivo   = document.getElementById("modal-motivo");
+    const $modalError    = document.getElementById("modal-error");
+    const $modalConfirm  = document.getElementById("modal-confirm");
+    const $modalCancel   = document.getElementById("modal-cancel");
+
+    let _pendingCancelId = null;
+
+    $modalCancel.addEventListener("click", cerrarModal);
+    $modal.addEventListener("click", e => { if (e.target === $modal) cerrarModal(); });
+
+    $modalConfirm.addEventListener("click", async () => {
+      const motivo = $modalMotivo.value.trim();
+      if (!motivo) {
+        $modalError.textContent = "El motivo es obligatorio para cancelar el pedido.";
+        $modalError.style.display = "block";
+        return;
+      }
+      const idParaCancelar = _pendingCancelId; // guardar ANTES de cerrar el modal
+      cerrarModal();
+      await ejecutarCambioEstado(idParaCancelar, "CANCELADO", motivo);
+    });
+
+    function abrirModalCancelacion(pedidoId) {
+      _pendingCancelId = pedidoId;
+      $modalMotivo.value = "";
+      $modalError.style.display = "none";
+      $modal.style.display = "flex";
+      setTimeout(() => $modal.classList.add("open"), 10);
+      $modalMotivo.focus();
+    }
+
+    function cerrarModal() {
+      $modal.classList.remove("open");
+      setTimeout(() => { $modal.style.display = "none"; }, 220);
+      _pendingCancelId = null;
+    }
+    // ──────────────────────────────────────────────────────────────
+
     function esc(v) {
       return String(v ?? "")
         .replace(/&/g,"&amp;").replace(/</g,"&lt;")
@@ -88,7 +128,6 @@ const URL_API = "http://localhost:8080";
       $tbody.innerHTML = "";
  
       pedidos.forEach((pedido) => {
-        // productos es ahora un array de objetos con campos: nombre, marca, precio, cantidad, etc.
         const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
         const cantTotal = productos.reduce((sum, p) => sum + (p.cantidad ?? 0), 0);
  
@@ -117,7 +156,6 @@ const URL_API = "http://localhost:8080";
     }
  
     function buildDetail(pedido) {
-      // productos es un array de { id, nombre, marca, precio, stock, foto, descripcion, sinStock, cantidad }
       const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
  
       let productoRows = "";
@@ -139,23 +177,30 @@ const URL_API = "http://localhost:8080";
         });
       }
  
-      // ENTREGADO y CANCELADO son estados finales: no se puede cambiar
       const esFinal = pedido.estadoPedido === "ENTREGADO" || pedido.estadoPedido === "CANCELADO";
  
       const opcionesEstado = ESTADOS.map(e =>
         `<option value="${e}" ${e === pedido.estadoPedido ? "selected" : ""}>${ESTADOS_LABELS[e]}</option>`
       ).join("");
  
-      // Mensaje informativo cuando el estado es final
       const mensajeFinal = {
         ENTREGADO: "Este pedido ya fue entregado. No se puede modificar.",
         CANCELADO: "Este pedido fue cancelado y el stock fue repuesto. No se puede modificar."
       };
+
+      // Bloque de motivo de cancelación (solo visible si fue cancelado y tiene motivo)
+      const motivoHtml = (pedido.estadoPedido === "CANCELADO" && pedido.motivoCancelacion)
+        ? `<div class="motivo-cancelacion-box">
+             <span class="motivo-label">&#128683; Motivo de cancelación</span>
+             <p class="motivo-texto">${esc(pedido.motivoCancelacion)}</p>
+           </div>`
+        : "";
  
       const gestionEstadoHtml = esFinal
         ? `<div style="background:rgba(56,182,204,.07);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-size:.84rem;color:var(--muted);line-height:1.5;">
              &#128274; ${mensajeFinal[pedido.estadoPedido]}
-           </div>`
+           </div>
+           ${motivoHtml}`
         : `<div>
              <label style="font-size:.77rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:6px">Nuevo estado</label>
              <div class="estado-select-wrap">
@@ -233,26 +278,38 @@ const URL_API = "http://localhost:8080";
  
     async function cambiarEstado(pedidoId) {
       const $select     = document.getElementById(`select-estado-${pedidoId}`);
-      const $btn        = document.getElementById(`btn-estado-${pedidoId}`);
       const nuevoEstado = $select.value;
- 
-      $btn.disabled    = true;
-      $btn.textContent = "Guardando...";
+
+      // Si se seleccionó CANCELADO, abrir modal para pedir el motivo
+      if (nuevoEstado === "CANCELADO") {
+        abrirModalCancelacion(pedidoId);
+        return;
+      }
+
+      await ejecutarCambioEstado(pedidoId, nuevoEstado, null);
+    }
+
+    async function ejecutarCambioEstado(pedidoId, nuevoEstado, motivoCancelacion) {
+      const $btn = document.getElementById(`btn-estado-${pedidoId}`);
+      if ($btn) {
+        $btn.disabled    = true;
+        $btn.textContent = "Guardando...";
+      }
  
       try {
+        const body = { estado: nuevoEstado };
+        if (motivoCancelacion) body.motivoCancelacion = motivoCancelacion;
+
         const res = await fetch(`${URL_API}/api/pedidos/${pedidoId}/estado`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ estado: nuevoEstado })
+          body: JSON.stringify(body)
         });
  
         if (!res.ok) {
-          const res2 = await fetch(`${URL_API}/api/pedidos/${pedidoId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ estadoPedido: nuevoEstado })
-          });
-          if (!res2.ok) throw new Error(`HTTP ${res2.status}`);
+          const errData = await res.json().catch(() => null);
+          const errMsg = errData?.message ?? `HTTP ${res.status}`;
+          throw new Error(errMsg);
         }
  
         mostrarToast(`Estado del pedido #${pedidoId} actualizado a "${ESTADOS_LABELS[nuevoEstado]}".`);
@@ -260,8 +317,10 @@ const URL_API = "http://localhost:8080";
  
       } catch (err) {
         mostrarToast(`Error al cambiar estado: ${err.message}`, true);
-        $btn.disabled    = false;
-        $btn.textContent = "Guardar cambio de estado";
+        if ($btn) {
+          $btn.disabled    = false;
+          $btn.textContent = "Guardar cambio de estado";
+        }
       }
     }
  

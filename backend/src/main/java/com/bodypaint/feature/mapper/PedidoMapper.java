@@ -49,7 +49,8 @@ public class PedidoMapper {
             pd.getEstado(),
             pd.getTotal(),
             pd.getId_cliente(),
-            pd.getFechaDePedido()
+            pd.getFechaDePedido(),
+            pd.getMotivoCancelacion()
         );
     }
 }

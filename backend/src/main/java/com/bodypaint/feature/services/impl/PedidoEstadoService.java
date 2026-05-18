@@ -23,7 +23,7 @@ public class PedidoEstadoService implements IPedidoEstadoService{
     private final CancelarPedido cancelarPedido;
  
     @Override
-    public PedidoResponse cambiarEstado(Long id, String nuevoEstado) {
+    public PedidoResponse cambiarEstado(Long id, String nuevoEstado, String motivoCancelacion) {
  
         Pedido pedido = pedidoRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Pedido no encontrado"));
@@ -43,8 +43,11 @@ public class PedidoEstadoService implements IPedidoEstadoService{
         }
  
         if (estadoNuevo == EstadoPedido.CANCELADO) {
-            // CancelarPedido ya se encarga de cambiar el estado, guardar y devolver el stock
-            cancelarPedido.cancelarPedido(pedido, pedido.getProductos());
+            if (motivoCancelacion == null || motivoCancelacion.isBlank()) {
+                throw new IllegalArgumentException("Debe indicar el motivo de cancelacion.");
+            }
+            // CancelarPedido se encarga de cambiar el estado, guardar y devolver el stock
+            cancelarPedido.cancelarPedido(pedido, pedido.getProductos(), motivoCancelacion);
         } else {
             // Para ENTREGADO (u otro estado futuro) solo actualizamos el estado
             pedido.setEstado(estadoNuevo);
