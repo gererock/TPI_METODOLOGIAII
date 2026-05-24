@@ -23,12 +23,8 @@ public class PedidoMapper {
                      .build();
     }
 
-    public static PedidoResponse toResponse(Pedido pd, Map<ProductoResponseDto, Integer> productosMap) {
+    public static PedidoResponse toResponse(Pedido pd, Map<ProductoResponseDto, Integer> productosMap, String domicilioCliente) {
 
-        // Convertimos el Map<ProductoResponseDto, Integer> a List<ProductoEnPedido>
-        // para que Jackson serialice cada entrada como un objeto JSON plano con
-        // todos sus campos (incluida la cantidad), en lugar de usar el toString()
-        // del record como clave del mapa.
         List<ProductoEnPedido> productos = productosMap.entrySet().stream()
             .map(e -> new ProductoEnPedido(
                 e.getKey().id(),
@@ -49,6 +45,7 @@ public class PedidoMapper {
             pd.getEstado(),
             pd.getTotal(),
             pd.getId_cliente(),
+            domicilioCliente,
             pd.getFechaDePedido(),
             pd.getMotivoCancelacion()
         );

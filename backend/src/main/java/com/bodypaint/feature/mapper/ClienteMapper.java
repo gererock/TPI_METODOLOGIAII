@@ -16,6 +16,9 @@ public class ClienteMapper {
                         .provincia(dto.provincia())
                         .piso(dto.piso())
                         .departamento(dto.departamento())
+                        .altura(dto.altura())
+                        .calle(dto.calle())
+                        .codigoPostal(dto.codigoPostal())
                         .build();
     }
 
@@ -29,7 +32,10 @@ public class ClienteMapper {
                                     cl.getLocalidad(), 
                                     cl.getProvincia(), 
                                     cl.getPiso(), 
-                                    cl.getDepartamento());
+                                    cl.getDepartamento(),
+                                    cl.getCalle(),
+                                    cl.getAltura(),
+                                    cl.getCodigoPostal());
 
     }
 

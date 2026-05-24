@@ -98,6 +98,19 @@
     font-weight: 900; line-height: 1; letter-spacing: -0.5px; margin-bottom: 12px;
     animation: fadeUp .6s ease both;
   }
+
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
   .hero-sub { font-size: .92rem; color: rgba(244,246,248,.7); animation: fadeUp .6s .1s ease both; }
   
   /* ─── FORM SECTION ─── */

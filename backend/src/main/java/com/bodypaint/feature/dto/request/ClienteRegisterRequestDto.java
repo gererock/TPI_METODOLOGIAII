@@ -32,10 +32,23 @@ public record  ClienteRegisterRequestDto(
     @NotBlank(message="Debe ingresar una provincia")
     String provincia,
 
+    @NotBlank(message="La calle es un campo obligatorio")
+    String calle,
+
+    @Positive(message="La altura debe ser mayor a 0")
+    @NotNull(message="La altura es un parametro obligatorio")
+    Integer altura,
+
+
     @Positive(message="El piso debe ser mayor a 0")
     Integer piso,
 
-    String departamento
+    String departamento,
+
+    @Positive(message="El codigo postal debe ser un numero mayor a 0")
+    @NotNull(message="El codigo postal es un parametro obligatorio")
+    Integer codigoPostal
+
 ) {
     
 }

@@ -166,7 +166,7 @@ async function enviarPedidoAlBackend() {
   }
 
   const pedido = {
-    idCliente: idCliente,
+    id_cliente: idCliente,
     total: resumen.total,
     productos: productos,
   };

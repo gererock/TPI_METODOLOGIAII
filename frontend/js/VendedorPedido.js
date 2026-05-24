@@ -128,6 +128,9 @@ const URL_API = "http://localhost:8080";
       $tbody.innerHTML = "";
  
       pedidos.forEach((pedido) => {
+        // Normalizar el id del cliente (el backend puede enviarlo como idCliente o id_cliente)
+        pedido._idCliente = pedido.idCliente ?? pedido.id_cliente ?? "-";
+
         const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
         const cantTotal = productos.reduce((sum, p) => sum + (p.cantidad ?? 0), 0);
  
@@ -137,7 +140,7 @@ const URL_API = "http://localhost:8080";
         trMain.innerHTML = `
           <td><span class="expand-icon">&#9660;</span></td>
           <td><strong>#${esc(pedido.id)}</strong></td>
-          <td>${esc(pedido.id_cliente ?? "-")}</td>
+          <td>${esc(pedido._idCliente)}</td>
           <td>${esc(formatDate(pedido.fechaDePedido))}</td>
           <td>${estadoChip(pedido.estadoPedido)}</td>
           <td>${cantTotal} &iacute;tem${cantTotal !== 1 ? "s" : ""}</td>
@@ -241,7 +244,11 @@ const URL_API = "http://localhost:8080";
               </div>
               <div class="detail-meta-row">
                 <span>ID cliente</span>
-                <span>${esc(pedido.id_cliente ?? "-")}</span>
+                <span>${esc(pedido._idCliente ?? pedido.idCliente ?? pedido.id_cliente ?? "-")}</span>
+              </div>
+              <div class="detail-meta-row">
+                <span>Domicilio</span>
+                <span>${esc(pedido.domicilioCliente || "-")}</span>
               </div>
               <div class="detail-meta-row total-row">
                 <span>Total</span>

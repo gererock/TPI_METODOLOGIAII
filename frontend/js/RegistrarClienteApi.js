@@ -18,7 +18,27 @@ const elementos = {
   inputLocalidad: document.getElementById("localidad"),
   inputPiso: document.getElementById("piso"),
   inputDepartamento: document.getElementById("departamento"),
+  inputCalle: document.getElementById("calle"),
+  inputAltura: document.getElementById("altura"),
+  inputCodigoPostal: document.getElementById("codigoPostal"),
 };
+
+
+const numberInputs = document.querySelectorAll('input[type="number"]');
+
+numberInputs.forEach((input) => {
+  // Bloquear scroll
+  input.addEventListener("wheel", (e) => {
+    e.preventDefault();
+  });
+
+  // Bloquear flechas ↑ ↓
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      e.preventDefault();
+    }
+  });
+});
 
 // Helpers de mensajes y errores.
 function mostrarToast(mensaje, esError = false) {
@@ -73,8 +93,12 @@ function obtenerDatosFormulario() {
     localidad: elementos.inputLocalidad.value.trim(),
     departamento: elementos.inputDepartamento.value.trim(),
     pisoIngresado: elementos.inputPiso.value,
+    calle: elementos.inputCalle.value.trim(),
+    alturaIngresada: elementos.inputAltura.value,
+    codigoPostalIngresado: elementos.inputCodigoPostal.value,
   };
 }
+
 
 function validarFormularioRegistro({
   dniIngresado,
@@ -84,6 +108,9 @@ function validarFormularioRegistro({
   password,
   provincia,
   localidad,
+  calle,
+  alturaIngresada,
+  codigoPostalIngresado,
 }) {
   if (!nombre || !apellido) {
     return "El nombre y apellido son obligatorios.";
@@ -101,6 +128,18 @@ function validarFormularioRegistro({
     return "La provincia y localidad son obligatorias.";
   }
 
+  if (!calle) {
+    return "La calle es obligatoria.";
+  }
+
+  if (!alturaIngresada) {
+    return "La altura es obligatoria.";
+  }
+
+  if (!codigoPostalIngresado) {
+    return "El codigo postal es obligatorio.";
+  }
+
   if (password.length < 8) {
     return "La contrasena debe tener al menos 8 caracteres.";
   }
@@ -116,6 +155,9 @@ function construirPayloadCliente(datosFormulario) {
     password: datosFormulario.password,
     localidad: datosFormulario.localidad,
     provincia: datosFormulario.provincia,
+    calle: datosFormulario.calle,
+    altura: Number.parseInt(datosFormulario.alturaIngresada, 10),
+    codigoPostal: Number.parseInt(datosFormulario.codigoPostalIngresado, 10),
     piso: datosFormulario.pisoIngresado
       ? Number.parseInt(datosFormulario.pisoIngresado, 10)
       : null,

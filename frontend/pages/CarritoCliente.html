@@ -49,6 +49,14 @@
     </section>
 
     <aside class="checkout-sidebar">
+      <!-- Tarjeta de datos del cliente -->
+      <div class="summary-card" id="cliente-info-card" style="margin-bottom:1rem; display:none;">
+        <p class="summary-eyebrow">Cliente</p>
+        <h2 class="summary-title" id="cliente-nombre" style="font-size:1.1rem;margin-bottom:.5rem;"></h2>
+        <p style="font-size:.85rem;opacity:.7;margin-bottom:.25rem;">ID: <strong id="cliente-id"></strong></p>
+        <p style="font-size:.85rem;opacity:.8;" id="cliente-domicilio"></p>
+      </div>
+
       <div class="summary-card">
         <p class="summary-eyebrow">Confirmar compra</p>
         <h2 class="summary-title">Pago en efectivo</h2>
@@ -86,5 +94,32 @@
       </div>
     </div>
   </div>
+  <script>
+    // Muestra ID y domicilio del cliente registrado desde localStorage
+    (function () {
+      try {
+        const raw = localStorage.getItem("cliente");
+        if (!raw) return;
+        const c = JSON.parse(raw);
+        const id = c.id ?? c.idCliente ?? null;
+        if (!id) return;
+
+        const partesDomicilio = [
+          c.calle ? `${c.calle}${c.altura ? " " + c.altura : ""}` : null,
+          c.piso ? `Piso ${c.piso}${c.departamento ? " Dto. " + c.departamento : ""}` : (c.departamento ? `Dto. ${c.departamento}` : null),
+          c.localidad,
+          c.provincia,
+          c.codigoPostal ? `CP ${c.codigoPostal}` : null,
+        ].filter(Boolean);
+
+        document.getElementById("cliente-id").textContent = id;
+        document.getElementById("cliente-nombre").textContent = c.nombre ?? c.email ?? "";
+        document.getElementById("cliente-domicilio").textContent = partesDomicilio.join(", ");
+        document.getElementById("cliente-info-card").style.display = "block";
+      } catch (e) {
+        // Si no hay cliente, simplemente no se muestra la tarjeta
+      }
+    })();
+  </script>
 </body>
 </html>

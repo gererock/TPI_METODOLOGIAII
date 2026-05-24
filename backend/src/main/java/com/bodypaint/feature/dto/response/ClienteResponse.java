@@ -16,7 +16,13 @@ public record ClienteResponse(
 
     Integer piso,
 
-    String departamento
+    String departamento,
+
+    String calle,
+
+    Integer altura,
+
+    Integer codigoPostal
 
 ) {
     

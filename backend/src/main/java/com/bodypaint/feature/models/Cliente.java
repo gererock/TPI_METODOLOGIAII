@@ -34,6 +34,12 @@ public class Cliente {
 
     private String provincia;
 
+    private String calle;
+
+    private Integer codigoPostal;
+
+    private Integer altura;
+
     private Integer piso;
 
     private String departamento;
