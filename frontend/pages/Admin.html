@@ -66,11 +66,11 @@
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="nombre">Nombre *</label>
-                <input class="form-input" type="text" id="nombre" placeholder="Ej: Pintura l&aacute;tex premium" required />
+                <input class="form-input" type="text" id="nombre" placeholder="Ej: Pintura corporal roja" required />
               </div>
               <div class="form-group">
                 <label class="form-label" for="marca">Marca *</label>
-                <input class="form-input" type="text" id="marca" placeholder="Ej: Sherwin-Williams" required />
+                <input class="form-input" type="text" id="marca" placeholder="Ej: BodyPaint" required />
               </div>
             </div>
 
@@ -85,6 +85,11 @@
               <div class="form-group">
                 <label class="form-label" for="stock">Stock *</label>
                 <input class="form-input" type="number" id="stock" placeholder="1" min="1" required />
+              </div>
+            
+              <div class="form-group">
+                <label class="form-label" for="stock_min">Stock minimo *</label>
+                <input class="form-input" type="number" id="stock_min" placeholder="1" min="1" required />
               </div>
             </div>
 
@@ -125,11 +130,13 @@
                 <th>Marca</th>
                 <th>Precio</th>
                 <th>Stock</th>
+                <th>Stock mínimo</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody id="products-tbody">
               <tr class="empty-row">
-                <td colspan="4">No hay productos cargados a&uacute;n.</td>
+                <td colspan="6">No hay productos cargados a&uacute;n.</td>
               </tr>
             </tbody>
           </table>
