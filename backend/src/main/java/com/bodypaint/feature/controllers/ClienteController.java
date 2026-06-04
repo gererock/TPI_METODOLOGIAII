@@ -12,6 +12,9 @@ import com.bodypaint.feature.Config.BaseResponse;
 import com.bodypaint.feature.dto.request.ClienteRegisterRequestDto;
 import com.bodypaint.feature.services.interfaces.IClienteRegisterService;
 
+import com.bodypaint.feature.dto.request.ClienteLoginRequestDto;
+import com.bodypaint.feature.services.interfaces.IClienteLoginService;
+
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -23,11 +26,18 @@ import lombok.AllArgsConstructor;
 public class ClienteController {
 
     private final IClienteRegisterService clienteRegisterService;
+    private final IClienteLoginService clienteLoginService;
 
     @PostMapping("/register")
-    public ResponseEntity<BaseResponse<?>> registrar(@Valid @RequestBody ClienteRegisterRequestDto dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-            BaseResponse.ok(clienteRegisterService.registrar(dto), "Cliente Registrado Correctamente")
+    public ResponseEntity<BaseResponse<?>> registrar(@Valid @RequestBody ClienteRegisterRequestDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(BaseResponse.ok(clienteRegisterService.registrar(dto), "Cliente registrado correctamente"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<BaseResponse<?>> login(@Valid @RequestBody ClienteLoginRequestDto dto) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(clienteLoginService.login(dto), "Inicio de sesión correcto")
         );
-}
+    }
 }

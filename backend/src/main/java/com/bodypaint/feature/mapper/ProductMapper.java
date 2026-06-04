@@ -13,6 +13,7 @@ public class ProductMapper {
                         .marca(dto.marca())
                         .precio(dto.precio())
                         .stock(dto.stock())
+                        .stockMinimo(dto.stockMinimo())
                         .foto(dto.foto())
                         .descripcion(dto.descripcion())
                         .sinStock(false)
@@ -27,7 +28,8 @@ public class ProductMapper {
                                         p.getNombre(), 
                                         p.getMarca(), 
                                         p.getPrecio(), 
-                                        p.getStock(), 
+                                        p.getStock(),
+                                        p.getStockMinimo(),
                                         p.getFoto(), 
                                         p.getDescripcion(),
                                         p.getSinStock());

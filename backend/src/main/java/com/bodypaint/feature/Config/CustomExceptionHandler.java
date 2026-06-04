@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.bodypaint.feature.Config.errors.LoginInvalidoException;
 
 import com.bodypaint.feature.Config.errors.NotFoundException;
 import com.bodypaint.feature.Config.errors.ProductoYaExisteException;
@@ -66,4 +67,13 @@ public class CustomExceptionHandler {
         response.put("errors", null);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(LoginInvalidoException.class)
+    public ResponseEntity<Map<String, Object>> handleLoginInvalido(LoginInvalidoException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 401);
+        response.put("message", ex.getMessage());
+        response.put("errors", null);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+}
 }

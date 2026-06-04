@@ -1,8 +1,8 @@
 // Configuracion general y referencias del panel de administracion.
 const URL_API = "http://localhost:8080";
 const DURACION_TOAST_MS = 3500;
-const FILA_TABLA_VACIA = '<tr class="empty-row"><td colspan="4">No hay productos cargados aun.</td></tr>';
-const IDS_CAMPOS_PRODUCTO = ["nombre", "marca", "precio", "stock", "foto", "descripcion"];
+const FILA_TABLA_VACIA = '<tr class="empty-row"><td colspan="6">No hay productos cargados aun.</td></tr>';
+const IDS_CAMPOS_PRODUCTO = ["nombre", "marca", "precio", "stock", "stock_min", "foto", "descripcion"];
 
 const elementos = {
   toast: document.getElementById("toast"),
@@ -25,6 +25,17 @@ function escaparHtml(valor) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function estaEnStockMinimo(producto) {
+  const stock = Number(producto.stock);
+  const stockMinimo = Number(producto.stockMinimo);
+
+  return (
+    Number.isFinite(stock) &&
+    Number.isFinite(stockMinimo) &&
+    stock <= stockMinimo
+  );
 }
 
 function mostrarToast(mensaje, esError = false) {
@@ -79,14 +90,26 @@ function renderizarTabla(productos) {
   }
 
   elementos.cuerpoTablaProductos.innerHTML = productos
-    .map((producto) => `
-      <tr>
-        <td>${escaparHtml(producto.nombre)}</td>
-        <td>${escaparHtml(producto.marca)}</td>
-        <td class="price-col">$${Number(producto.precio).toFixed(2)}</td>
-        <td>${escaparHtml(producto.stock)}</td>
-      </tr>
-    `)
+    .map((producto) => {
+      const stockMinimoAlcanzado = estaEnStockMinimo(producto);
+
+      return `
+        <tr class="${stockMinimoAlcanzado ? "stock-minimo-row" : ""}">
+          <td>${escaparHtml(producto.nombre)}</td>
+          <td>${escaparHtml(producto.marca)}</td>
+          <td class="price-col">$${Number(producto.precio).toFixed(2)}</td>
+          <td>${escaparHtml(producto.stock)}</td>
+          <td>${escaparHtml(producto.stockMinimo)}</td>
+          <td>
+            ${
+              stockMinimoAlcanzado
+                ? '<span class="stock-alerta">Stock mínimo</span>'
+                : '<span class="stock-normal">Stock normal</span>'
+            }
+          </td>
+        </tr>
+      `;
+    })
     .join("");
 }
 
@@ -96,6 +119,7 @@ function obtenerPayloadProducto() {
     marca: elementos.camposFormulario.marca.value.trim(),
     precio: Number.parseFloat(elementos.camposFormulario.precio.value),
     stock: Number.parseInt(elementos.camposFormulario.stock.value, 10),
+    stockMinimo: Number(elementos.camposFormulario.stock_min.value),
     foto: elementos.camposFormulario.foto.value.trim(),
     descripcion: elementos.camposFormulario.descripcion.value.trim(),
   };
@@ -117,6 +141,9 @@ function validarFormularioProducto(producto) {
   if (Number.isNaN(producto.stock) || producto.stock <= 0) {
     return "El stock debe ser mayor a 0.";
   }
+  if (Number.isNaN(producto.stockMinimo) || producto.stockMinimo <= 0 || !Number.isInteger(producto.stockMinimo)) {
+  return "El stock mínimo debe ser un número entero y mayor a 0.";
+}
 
   if (!producto.foto) {
     return "La URL de foto es obligatoria.";
@@ -153,7 +180,7 @@ async function cargarProductosAdmin() {
     console.error("[cargarProductosAdmin]", error);
     elementos.cuerpoTablaProductos.innerHTML = `
       <tr class="empty-row">
-        <td colspan="4">Error al cargar productos: ${escaparHtml(error.message)}</td>
+        <td colspan="6">Error al cargar productos: ${escaparHtml(error.message)}</td>
       </tr>
     `;
   }

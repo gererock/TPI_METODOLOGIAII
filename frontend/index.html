@@ -1,67 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BodyPaint</title>
-    <link rel="stylesheet" href="/frontend/css/styleIndex.css">
-    <style>
-        .vendedor {
-            background: #1e4f3a;
-            border: 2px solid #2a7f8f;
-            color: #ffffff;
-        }
-        .vendedor:hover {
-            background: #2a7f8f;
-            color: #ffffff;
-            transform: translateY(-5px);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BodyPaint</title>
+  <link rel="stylesheet" href="/frontend/css/styleIndex.css" />
 </head>
 <body>
-    <header>
 
-        <div class="logo">
-            BodyPaint
-        </div>
+  <main class="index-container">
+    <section class="index-card">
+      <h1>Body<span>Paint</span></h1>
 
-        <nav>
-            <a href="#">Inicio</a>
-            <a href="#">Servicios</a>
-            <a href="#">Contacto</a>
-        </nav>
+      <p class="index-subtitle">
+        Bienvenido a BodyPaint. Iniciá sesión o registrate para acceder al catálogo.
+      </p>
 
-    </header>
+      <div class="index-actions">
+        <a class="index-btn primary" href="/frontend/pages/LoginCliente.html">
+          Iniciar sesión
+        </a>
 
-    <main>
-
-        <div class="contenido">
-
-            <h1>Bienvenido a BodyPaint</h1>
-
-            <p>
-                Especialistas en pintura, color y materiales para cada proyecto.
-            </p>
-
-            <div class="botones">
-
-                <a href="/frontend/pages/Admin.html" class="btn admin">
-                    Cuenta Admin
-                </a>
-
-                <a href="/frontend/pages/RegistrarCliente.html" class="btn cliente">
-                    Cuenta Cliente
-                </a>
-
-                <a href="/frontend/pages/VendedorPedidos.html" class="btn vendedor">
-                    Vendedor
-                </a>
-
-            </div>
-
-        </div>
-
-    </main>
+        <a class="index-btn secondary" href="/frontend/pages/RegistrarCliente.html">
+          Registrarse
+        </a>
+      </div>
+    </section>
+  </main>
 
 </body>
 </html>
