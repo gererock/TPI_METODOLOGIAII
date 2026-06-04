@@ -7,9 +7,11 @@ public record ProductoResponseDto(
     String marca,
     Double precio,
     Integer stock,
+    Integer stockMinimo,
     String foto,
     String descripcion,
     Boolean sinStock
     
 ) {
 }
+    

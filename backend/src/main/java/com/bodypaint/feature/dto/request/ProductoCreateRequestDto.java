@@ -21,6 +21,10 @@ public record ProductoCreateRequestDto(
     @Positive(message="el campo de stock debe ser mayor a 0") 
     Integer stock,
 
+    @NotNull(message="El stock mínimo es obligatorio ingresarlo.")
+    @Positive(message="El stock mínimo debe ser mayor a 0")
+    Integer stockMinimo,
+
     @NotBlank(message="Debe ingresar una url en foto obligatorio.")
     @Pattern(
         regexp = "^(http|https)://.*$",

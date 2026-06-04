@@ -22,7 +22,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: var(--font-body);
+      font-family: var(--font-body, 'Barlow', sans-serif);
       background: var(--navy);
       color: var(--white);
       min-height: 100vh;
@@ -40,7 +40,7 @@
       padding: 0 40px; height: 64px;
     }
     .nav-logo {
-      font-family: var(--font-head); font-size: 1.6rem; font-weight: 900;
+      font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: 1.6rem; font-weight: 900;
       letter-spacing: 0.5px; color: var(--white); text-decoration: none; flex-shrink: 0;
     }
     .nav-logo span { color: var(--cyan); }
@@ -55,7 +55,7 @@
     /* ─── BUTTONS ─── */
     .btn-solid {
       background: var(--teal); color: var(--white); border: none;
-      font-family: var(--font-body); font-size: .85rem; font-weight: 700;
+      font-family: var(--font-body, 'Barlow', sans-serif); font-size: .85rem; font-weight: 700;
       padding: 9px 20px; border-radius: var(--radius); cursor: pointer;
       transition: background .2s, transform .15s;
     }
@@ -63,7 +63,7 @@
     .btn-outline {
       background: transparent; color: var(--white);
       border: 2px solid rgba(255,255,255,.35);
-      font-family: var(--font-body); font-size: .85rem; font-weight: 700;
+      font-family: var(--font-body, 'Barlow', sans-serif); font-size: .85rem; font-weight: 700;
       padding: 7px 20px; border-radius: var(--radius); cursor: pointer;
       transition: border-color .2s, color .2s, transform .15s;
     }
@@ -91,7 +91,7 @@
       text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
     }
     .hero-title {
-      font-family: var(--font-head); font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: clamp(2.2rem, 5vw, 3.6rem);
       font-weight: 900; line-height: 1; letter-spacing: -0.5px; margin-bottom: 14px;
       animation: fadeUp .6s ease both;
     }
@@ -108,7 +108,7 @@
     }
     .tab-btn {
       background: none; border: none; border-bottom: 3px solid transparent;
-      color: var(--muted); font-family: var(--font-body); font-size: .88rem;
+      color: var(--muted); font-family: var(--font-body, 'Barlow', sans-serif); font-size: .88rem;
       font-weight: 600; letter-spacing: .04em; padding: 18px 24px 15px;
       cursor: pointer; transition: color .2s, border-color .2s; white-space: nowrap;
     }
@@ -128,7 +128,7 @@
       margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
     }
     .section-title {
-      font-family: var(--font-head); font-size: 1.5rem; font-weight: 900;
+      font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: 1.5rem; font-weight: 900;
     }
     .section-sub { color: var(--muted); font-size: .85rem; margin-top: 3px; }
 
@@ -156,7 +156,7 @@
       font-size: 1.2rem; font-weight: 900; flex-shrink: 0;
     }
     .form-card-title {
-      font-family: var(--font-head); font-size: 1.15rem; font-weight: 900;
+      font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: 1.15rem; font-weight: 900;
     }
     .form-card-sub { font-size: .78rem; color: var(--muted); margin-top: 2px; }
 
@@ -182,7 +182,7 @@
 
     .form-input, .form-select, .form-textarea {
       background: var(--navy3); border: 1px solid var(--border); color: var(--white);
-      font-family: var(--font-body); font-size: .9rem;
+      font-family: var(--font-body, 'Barlow', sans-serif); font-size: .9rem;
       padding: 10px 14px; border-radius: var(--radius); outline: none;
       transition: border-color .2s, box-shadow .2s; width: 100%;
     }
@@ -224,7 +224,7 @@
     .toast {
       position: fixed; bottom: 28px; right: 28px; z-index: 999;
       background: var(--teal); color: var(--white);
-      font-family: var(--font-body); font-size: .88rem; font-weight: 600;
+      font-family: var(--font-body, 'Barlow', sans-serif); font-size: .88rem; font-weight: 600;
       padding: 13px 22px; border-radius: 10px;
       box-shadow: 0 8px 30px rgba(0,0,0,.4);
       transform: translateY(20px); opacity: 0;
@@ -262,7 +262,7 @@
       text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
     }
     .products-table .price-col {
-      font-family: var(--font-head); font-weight: 900; color: var(--white);
+      font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-weight: 900; color: var(--white);
     }
     .products-table .empty-row td {
       text-align: center; color: var(--muted); padding: 48px 20px; font-size: .9rem;
@@ -292,4 +292,27 @@
       .form-card-footer .btn-outline { width: 100%; text-align: center; justify-content: center; }
       .products-table th:nth-child(3),
       .products-table td:nth-child(3) { display: none; }
+    }
+    .stock-minimo-row td {
+    background: rgba(255, 193, 7, 0.08);
+    }
+
+    .stock-alerta {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255, 193, 7, 0.16);
+      border: 1px solid rgba(255, 193, 7, 0.35);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .stock-normal {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(42, 127, 143, 0.18);
+      border: 1px solid rgba(56, 182, 204, 0.25);
+      font-size: 0.78rem;
+      font-weight: 700;
     }

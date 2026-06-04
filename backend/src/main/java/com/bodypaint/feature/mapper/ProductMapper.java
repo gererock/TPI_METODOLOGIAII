@@ -5,19 +5,19 @@ import com.bodypaint.feature.dto.response.ProductoResponseDto;
 import com.bodypaint.feature.models.Producto;
 
 public class ProductMapper {
-    
+
 
     public static Producto toEntity(ProductoCreateRequestDto dto){
-        Producto producto = Producto.builder()
-                        .nombre(dto.nombre())
-                        .marca(dto.marca())
-                        .precio(dto.precio())
-                        .stock(dto.stock())
-                        .foto(dto.foto())
-                        .descripcion(dto.descripcion())
-                        .sinStock(false)
-                        .build();
-        return producto;
+        return Producto.builder()
+                    .nombre(dto.nombre())
+                    .marca(dto.marca())
+                    .precio(dto.precio())
+                    .stock(dto.stock())
+                    .stockMinimo(dto.stockMinimo())
+                    .foto(dto.foto())
+                    .descripcion(dto.descripcion())
+                    .sinStock(false)
+                    .build();
     }
 
 
@@ -27,7 +27,8 @@ public class ProductMapper {
                                         p.getNombre(), 
                                         p.getMarca(), 
                                         p.getPrecio(), 
-                                        p.getStock(), 
+                                        p.getStock(),
+                                        p.getStockMinimo(),
                                         p.getFoto(), 
                                         p.getDescripcion(),
                                         p.getSinStock());
