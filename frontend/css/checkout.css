@@ -447,3 +447,87 @@ button {
     flex: 1 1 100%;
   }
 }
+
+
+
+.coupon-box {
+  margin-top: 18px;
+  margin-bottom: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.coupon-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.coupon-row {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon-input {
+  flex: 1;
+  min-width: 0;
+  background: #102233;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: white;
+  padding: 11px 12px;
+  font-family: var(--font);
+  outline: none;
+}
+
+.coupon-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(56, 182, 204, 0.12);
+}
+
+.coupon-btn {
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-family: var(--font);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.coupon-btn:hover {
+  filter: brightness(1.08);
+}
+
+.coupon-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.coupon-message {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.coupon-message.success {
+  color: #6ee7a0;
+}
+
+.coupon-message.error {
+  color: #f87171;
+}
+
+.total-final-row {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+
+.total-final-row strong {
+  color: var(--teal);
+}

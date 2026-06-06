@@ -595,8 +595,7 @@ input {
   text-align: center;
   background:
     linear-gradient(160deg, rgba(10, 20, 32, 0.82), rgba(15, 25, 35, 0.6)),
-    url("https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1400&q=80")
-      center / cover no-repeat;
+    url("../../hero.png") center / cover no-repeat;
 }
 
 .hero-overlay {
@@ -1152,4 +1151,19 @@ input {
   .modal-actions .btn-solid {
     flex: 1 1 100%;
   }
+}
+
+
+.btn-logout {
+  background: #d62828;
+  color: #ffffff;
+  border: none;
+  padding: 7px 7px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 10px;
+}
+.btn-logout:hover {
+  background: #b71f1f;
 }

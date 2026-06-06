@@ -15,6 +15,9 @@ import com.bodypaint.feature.services.interfaces.IClienteRegisterService;
 import com.bodypaint.feature.dto.request.ClienteLoginRequestDto;
 import com.bodypaint.feature.services.interfaces.IClienteLoginService;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import com.bodypaint.feature.services.interfaces.IClienteGetService;
+
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -27,6 +30,7 @@ public class ClienteController {
 
     private final IClienteRegisterService clienteRegisterService;
     private final IClienteLoginService clienteLoginService;
+    private final IClienteGetService clienteGetService;
 
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<?>> registrar(@Valid @RequestBody ClienteRegisterRequestDto dto) {
@@ -38,6 +42,12 @@ public class ClienteController {
     public ResponseEntity<BaseResponse<?>> login(@Valid @RequestBody ClienteLoginRequestDto dto) {
         return ResponseEntity.ok(
                 BaseResponse.ok(clienteLoginService.login(dto), "Inicio de sesión correcto")
+        );
+    }
+    @GetMapping
+    public ResponseEntity<BaseResponse<?>> listarClientes() {
+         return ResponseEntity.ok(
+                BaseResponse.ok(clienteGetService.obtenerClientes(), "Clientes encontrados correctamente")
         );
     }
 }

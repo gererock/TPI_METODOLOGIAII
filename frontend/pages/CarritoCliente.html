@@ -67,13 +67,43 @@
         </div>
 
         <div class="summary-row">
-          <span>Total a pagar</span>
-          <strong id="summary-total">$0</strong>
-        </div>
+      <span>Total a pagar</span>
+      <strong id="summary-total">$0</strong>
+    </div>
 
-        <button class="btn-solid summary-button" id="cash-payment-btn" type="button">
-          Pagar en efectivo
+    <div class="coupon-box">
+      <label class="coupon-label" for="codigo-cupon">Cupón de descuento</label>
+
+      <div class="coupon-row">
+        <input
+          class="coupon-input"
+          type="number"
+          id="codigo-cupon"
+          placeholder="Código del cupón"
+          min="1"
+        />
+
+        <button class="coupon-btn" id="btn-aplicar-cupon" type="button">
+          Aplicar
         </button>
+      </div>
+
+      <p class="coupon-message" id="coupon-message"></p>
+    </div>
+
+    <div class="summary-row" id="discount-row" style="display:none;">
+      <span>Descuento aplicado</span>
+      <strong id="summary-discount">-$0</strong>
+    </div>
+
+    <div class="summary-row total-final-row" id="final-total-row" style="display:none;">
+      <span>Total final</span>
+      <strong id="summary-final-total">$0</strong>
+    </div>
+
+    <button class="btn-solid summary-button" id="cash-payment-btn" type="button">
+      Pagar en efectivo
+    </button>
 
         <a class="btn-outline summary-link" href="/frontend/pages/CatalogoCliente.html">
           Seguir comprando

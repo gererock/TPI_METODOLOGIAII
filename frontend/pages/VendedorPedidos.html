@@ -16,12 +16,14 @@
   <!-- Navbar -->
   <nav class="navbar">
     <a href="/frontend/index.html" class="nav-logo">Body<span>Paint</span></a>
-    <ul class="nav-links">
-      <li><a href="/frontend/index.html">Inicio</a></li>
-      <li><a href="/frontend/pages/CatalogoCliente.html">Catálogo</a></li>
-      <li><a href="/frontend/pages/Admin.html">Admin</a></li>
-      <li><a href="#" class="active">Vendedor</a></li>
-    </ul>
+      <ul class="nav-links">
+        <li><a href="#" class="active">Vendedor</a></li>
+        <li>
+          <button id="btn-cerrar-sesion-vendedor" class="btn-logout" type="button">
+            Cerrar sesión
+          </button>
+        </li>
+      </ul>
   </nav>
  
   <!-- Hero -->
@@ -57,7 +59,122 @@
           <span class="stat-value" id="stat-cancelado" style="color:#f87171">0</span>
         </div>
       </div>
- 
+
+
+
+      <!-- Lista de clientes -->
+      <div class="section-header">
+        <div>
+          <div class="section-title">Clientes registrados</div>
+          <div class="section-sub">
+            Usá el ID del cliente para generar un cupón de descuento.
+          </div>
+        </div>
+        <button class="btn-solid" id="btn-recargar-clientes" type="button">⟳ Recargar clientes</button>
+      </div>
+
+      <div class="orders-table-wrap">
+        <table class="orders-table" id="clientes-table">
+          <thead>
+            <tr>
+              <th>ID Cliente</th>
+              <th>Nombre</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody id="clientes-tbody">
+            <tr>
+              <td colspan="3">Cargando clientes...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+<br>
+<br>
+<br>
+<br>
+            <!-- Formulario generar cupón -->
+      <div class="section-header">
+        <div>
+          <div class="section-title">Generar cupón de descuento</div>
+          <div class="section-sub">
+            Ingresá el ID del cliente, la vigencia y el tipo de descuento.
+          </div>
+        </div>
+      </div>
+
+      <div class="coupon-form-card">
+        <div class="coupon-form-grid">
+          <div class="form-group">
+            <label class="form-label" for="cupon-cliente-id">ID Cliente *</label>
+            <input
+              class="form-input"
+              type="number"
+              id="cupon-cliente-id"
+              placeholder="Ej: 1"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cupon-fecha-desde">Fecha desde *</label>
+            <input
+              class="form-input"
+              type="text"
+              id="cupon-fecha-desde"
+              placeholder="dd/mm/aaaa"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cupon-fecha-hasta">Fecha hasta *</label>
+            <input
+              class="form-input"
+              type="text"
+              id="cupon-fecha-hasta"
+              placeholder="dd/mm/aaaa"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cupon-tipo-descuento">Tipo de descuento *</label>
+            <select class="form-input" id="cupon-tipo-descuento" required>
+              <option value="">Seleccionar</option>
+              <option value="PORCENTAJE">Porcentaje</option>
+              <option value="MONTO_FIJO">Monto fijo</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cupon-valor-descuento">Valor del descuento *</label>
+            <input
+              class="form-input"
+              type="number"
+              id="cupon-valor-descuento"
+              placeholder="Ej: 15.50"
+              min="0.01"
+              step="0.01"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="coupon-actions">
+          <button class="btn-solid" id="btn-generar-cupon" type="button">
+            Generar cupón
+          </button>
+        </div>
+
+        <div class="coupon-result" id="cupon-resultado" style="display:none"></div>
+      </div>
+
+<br>
+<br>
+<br>
+<br>
       <!-- Header -->
       <div class="section-header">
         <div>

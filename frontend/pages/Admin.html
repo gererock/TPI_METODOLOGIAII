@@ -17,10 +17,11 @@
   <nav class="navbar">
     <a href="#" class="nav-logo">Body<span>Paint</span></a>
     <ul class="nav-links">
-      <li><a href="#">Inicio</a></li>
-      <li><a href="/frontend/pages/CatalogoCliente.html">Cat&aacute;logo</a></li>
-      <li><a href="#" class="active">Admin</a></li>
-      <li><a href="/frontend/pages/VendedorPedidos.html">Vendedor</a></li>
+      <li>
+        <button id="btn-cerrar-sesion" class="btn-logout" type="button">
+          Cerrar sesión
+        </button>
+      </li>
     </ul>
   </nav>
 
@@ -39,6 +40,7 @@
     <div class="tabs" id="tabs">
       <button class="tab-btn active" data-tab="crear" type="button">+ Crear producto</button>
       <button class="tab-btn" data-tab="productos" type="button">Productos</button>
+      <button class="tab-btn" data-tab="reporte-stock" type="button">Reporte stock mínimo</button>
     </div>
   </div>
 
@@ -137,6 +139,41 @@
             <tbody id="products-tbody">
               <tr class="empty-row">
                 <td colspan="6">No hay productos cargados a&uacute;n.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-reporte-stock">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Reporte de productos cerca del stock mínimo</div>
+            <div class="section-sub">
+              Productos que llegaron al stock mínimo, están por debajo o se encuentran cerca.
+            </div>
+          </div>
+
+          <button class="btn-solid" id="btn-actualizar-reporte-stock" type="button">
+            Actualizar reporte
+          </button>
+        </div>
+
+        <div class="products-table-wrap">
+          <table class="products-table" id="reporte-stock-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Stock actual</th>
+                <th>Stock mínimo</th>
+                <th> </th>
+              </tr>
+            </thead>
+
+            <tbody id="reporte-stock-tbody">
+              <tr class="empty-row">
+                <td colspan="5">No hay productos cerca del stock mínimo.</td>
               </tr>
             </tbody>
           </table>
