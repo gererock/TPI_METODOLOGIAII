@@ -1,8 +1,7 @@
+/* VendedorPedidos.css — BodyPaint Luxury Theme */
 @import url('/frontend/css/bp-theme.css');
-
 /* ─── VENDEDOR CONTENT ─── */
 .vendedor-content { padding: 40px 0 80px; }
-
 /* ─── STATS BAR ─── */
 .stats-bar {
   display: flex; gap: 1px;
@@ -20,7 +19,6 @@
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
 }
 .stat-value { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--ink); }
-
 /* ─── SECTION HEADER ─── */
 .section-header {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -28,11 +26,11 @@
 }
 .section-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
 .section-sub { font-family: var(--font-body); font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
-
 /* ─── ORDERS TABLE ─── */
 .orders-table-wrap {
   border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: 48px;
 }
 .orders-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
 .orders-table thead { background: var(--cream); border-bottom: 1px solid var(--border2); }
@@ -46,19 +44,15 @@
   font-family: var(--font-body); color: var(--ink);
 }
 .orders-table tbody tr:last-child td { border-bottom: none; }
-
 /* ─── ORDER ROW ─── */
 .order-row { cursor: pointer; transition: background var(--transition); }
 .order-row:hover { background: var(--cream); }
 .order-row.expanded { background: var(--cream); }
-
-/* ─── EXPAND ICON ─── */
 .expand-icon {
   display: inline-block; font-size: 0.65rem; color: var(--muted);
   transition: transform 0.25s ease;
 }
 .order-row.expanded .expand-icon { transform: rotate(180deg); }
-
 /* ─── ESTADO CHIPS ─── */
 .estado-chip {
   display: inline-flex; align-items: center; gap: 5px;
@@ -78,10 +72,8 @@
   background: rgba(180,60,60,0.08); color: #B43C3C;
   border: 1px solid rgba(180,60,60,0.2);
 }
-
 /* ─── DETAIL ROW ─── */
 .detail-row td { padding: 0; }
-
 .detail-content {
   max-height: 0; overflow: hidden;
   transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
@@ -92,23 +84,17 @@
   max-height: 600px;
   padding: 28px 24px;
 }
-
-/* ─── DETAIL GRID (2 columnas) ─── */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   align-items: start;
 }
-
-/* ─── DETAIL SECTION TITLE ─── */
 .detail-section-title {
   font-family: var(--font-display); font-size: 0.7rem; font-weight: 700;
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--warm);
   margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
 }
-
-/* ─── PRODUCTS TABLE INSIDE DETAIL ─── */
 .detail-products-table {
   width: 100%; border-collapse: collapse;
   border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden;
@@ -126,13 +112,10 @@
 }
 .detail-products-table tbody tr:last-child td { border-bottom: none; }
 .detail-products-table tbody tr:hover { background: var(--cream); }
-
 .prod-name { font-family: var(--font-display); font-size: 0.88rem; font-weight: 700; color: var(--ink); }
 .prod-marca { font-family: var(--font-display); font-size: 0.6rem; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm); margin-top: 2px; }
 .prod-qty { font-family: var(--font-body); color: var(--muted); }
 .prod-price { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
-
-/* ─── DETAIL META (fecha, cliente, total) ─── */
 .detail-meta { background: var(--white); border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; }
 .detail-meta-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -142,43 +125,17 @@
 .detail-meta-row:last-child { border-bottom: none; }
 .detail-meta-row span:last-child { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
 .detail-meta-row.total-row span:last-child { font-size: 1.1rem; }
-
-/* ─── ESTADO SECTION (columna derecha) ─── */
 .estado-section { display: flex; flex-direction: column; gap: 16px; }
-
 .estado-current {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-body); font-size: 0.82rem; color: var(--muted);
-  padding: 14px 16px;
-  background: var(--white); border: 1px solid var(--border2); border-radius: var(--radius);
 }
-
-/* estado bloqueado */
 .estado-locked {
   background: var(--white); border: 1px solid var(--border2); border-radius: var(--radius);
   padding: 16px; font-family: var(--font-body); font-size: 0.82rem;
   color: var(--muted); line-height: 1.5; display: flex; gap: 10px; align-items: flex-start;
 }
-
-/* motivo cancelación */
-.motivo-cancelacion-box {
-  margin-top: 12px; background: rgba(180,60,60,0.05);
-  border: 1px solid rgba(180,60,60,0.18); border-radius: var(--radius); padding: 14px 16px;
-}
-.motivo-label {
-  font-family: var(--font-display); font-size: 0.62rem; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase; color: #B43C3C;
-  display: block; margin-bottom: 8px;
-}
-.motivo-texto {
-  font-family: var(--font-body); font-size: 0.82rem; color: var(--ink);
-  line-height: 1.6; font-style: italic;
-}
-
-/* select de estado */
-.estado-select-wrap {
-  position: relative; margin-bottom: 14px;
-}
+.estado-select-wrap { position: relative; margin-bottom: 14px; }
 .estado-select {
   width: 100%; padding: 11px 36px 11px 14px;
   background: var(--white); border: 1px solid var(--border2);
@@ -193,7 +150,6 @@
   transform: translateY(-50%); pointer-events: none;
   color: var(--muted); font-size: 0.75rem;
 }
-
 .btn-cambiar-estado {
   width: 100%; padding: 11px 20px;
   background: var(--ink); color: var(--white);
@@ -204,8 +160,74 @@
 }
 .btn-cambiar-estado:hover { background: var(--warm); }
 .btn-cambiar-estado:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* ─── LOADING ─── */
+.motivo-cancelacion-box {
+  margin-top: 12px; background: rgba(180,60,60,0.05);
+  border: 1px solid rgba(180,60,60,0.18); border-radius: var(--radius); padding: 14px 16px;
+}
+.motivo-label {
+  font-family: var(--font-display); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: #B43C3C;
+  display: block; margin-bottom: 8px;
+}
+.motivo-texto {
+  font-family: var(--font-body); font-size: 0.82rem; color: var(--ink);
+  line-height: 1.6; font-style: italic; white-space: pre-wrap;
+}
+/* ─── FORM CARDS (cupón + reporte) ─── */
+.coupon-form-card,
+.reporte-form-card {
+  background: var(--white);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 48px;
+}
+.coupon-form-grid,
+.reporte-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.coupon-actions,
+.reporte-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+.coupon-result {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--ink);
+  line-height: 1.6;
+}
+#reporte-mas-vendidos-wrap { margin-bottom: 48px; }
+#reporte-mas-vendidos-tbody strong { color: var(--warm); font-weight: 700; }
+/* ─── LOGOUT ─── */
+.btn-logout {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-left: auto;
+  transition: var(--transition);
+}
+.btn-logout:hover {
+  border-color: #B43C3C;
+  color: #B43C3C;
+}
+/* ─── LOADING / EMPTY ─── */
 .loading-state {
   display: flex; flex-direction: column; align-items: center;
   gap: 16px; padding: 60px; color: var(--muted);
@@ -217,15 +239,12 @@
   border-radius: 50%; animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ─── EMPTY STATE ─── */
 .empty-state { padding: 64px 20px; text-align: center; }
 .empty-ico { font-size: 2rem; margin-bottom: 12px; opacity: 0.4; }
 .empty-state p {
   font-family: var(--font-display); font-size: 0.9rem; font-weight: 300;
   color: var(--light); font-style: italic; letter-spacing: 0.04em;
 }
-
 /* ─── MODAL CANCELACIÓN ─── */
 #modal-cancelacion {
   position: fixed; inset: 0; background: rgba(10,10,10,0.5);
@@ -233,7 +252,6 @@
   transition: opacity 0.22s;
 }
 #modal-cancelacion.open { display: flex; }
-
 .modal-box {
   background: var(--white); border-radius: var(--radius);
   width: 100%; max-width: 480px; overflow: hidden;
@@ -273,9 +291,19 @@
   letter-spacing: 0.14em; text-transform: uppercase;
   padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition);
 }
+.btn-modal-cancel:hover { border-color: var(--ink); color: var(--ink); }
 .btn-modal-confirm:hover { background: #9A2E2E; border-color: #9A2E2E; }
-
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .coupon-form-grid,
+  .reporte-form-grid { grid-template-columns: 1fr; }
+  .coupon-actions,
+  .reporte-actions { justify-content: stretch; }
+  .coupon-actions .btn-solid,
+  .reporte-actions .btn-solid { width: 100%; }
+}
 @media (max-width: 768px) {
   .stats-bar { flex-direction: column; gap: 0; }
   .detail-grid { grid-template-columns: 1fr; gap: 20px; }
+  .btn-logout { display: none; }
 }
