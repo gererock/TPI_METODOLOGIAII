@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,25 +8,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link
     href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@700;900&display=swap"
-    rel="stylesheet"
-  />
-<link rel="stylesheet" href="/frontend/css/VendedorPedidos.css">
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/frontend/css/VendedorPedidos.css">
 </head>
+
 <body>
- 
+
   <!-- Navbar -->
   <nav class="navbar">
     <a href="/frontend/index.html" class="nav-logo">Body<span>Paint</span></a>
-      <ul class="nav-links">
-        <li><a href="#" class="active">Vendedor</a></li>
-        <li>
-          <button id="btn-cerrar-sesion-vendedor" class="btn-logout" type="button">
-            Cerrar sesión
-          </button>
-        </li>
-      </ul>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Vendedor</a></li>
+      <li>
+        <button id="btn-cerrar-sesion-vendedor" class="btn-logout" type="button">
+          Cerrar sesión
+        </button>
+      </li>
+    </ul>
   </nav>
- 
+
   <!-- Hero -->
   <section class="hero">
     <div class="hero-overlay"></div>
@@ -35,11 +36,11 @@
       <p class="hero-sub">Gestioná todos los pedidos, cambiá estados y revisá el detalle de cada orden.</p>
     </div>
   </section>
- 
+
   <!-- Contenido -->
   <div class="vendedor-content">
     <div class="container">
- 
+
       <!-- Stats bar -->
       <div class="stats-bar" id="stats-bar" style="display:none">
         <div class="stat-chip">
@@ -89,11 +90,11 @@
           </tbody>
         </table>
       </div>
-<br>
-<br>
-<br>
-<br>
-            <!-- Formulario generar cupón -->
+      <br>
+      <br>
+      <br>
+      <br>
+      <!-- Formulario generar cupón -->
       <div class="section-header">
         <div>
           <div class="section-title">Generar cupón de descuento</div>
@@ -107,36 +108,17 @@
         <div class="coupon-form-grid">
           <div class="form-group">
             <label class="form-label" for="cupon-cliente-id">ID Cliente *</label>
-            <input
-              class="form-input"
-              type="number"
-              id="cupon-cliente-id"
-              placeholder="Ej: 1"
-              min="1"
-              required
-            />
+            <input class="form-input" type="number" id="cupon-cliente-id" placeholder="Ej: 1" min="1" required />
           </div>
 
           <div class="form-group">
             <label class="form-label" for="cupon-fecha-desde">Fecha desde *</label>
-            <input
-              class="form-input"
-              type="text"
-              id="cupon-fecha-desde"
-              placeholder="dd/mm/aaaa"
-              required
-            />
+            <input class="form-input" type="text" id="cupon-fecha-desde" placeholder="dd/mm/aaaa" required />
           </div>
 
           <div class="form-group">
             <label class="form-label" for="cupon-fecha-hasta">Fecha hasta *</label>
-            <input
-              class="form-input"
-              type="text"
-              id="cupon-fecha-hasta"
-              placeholder="dd/mm/aaaa"
-              required
-            />
+            <input class="form-input" type="text" id="cupon-fecha-hasta" placeholder="dd/mm/aaaa" required />
           </div>
 
           <div class="form-group">
@@ -150,15 +132,8 @@
 
           <div class="form-group">
             <label class="form-label" for="cupon-valor-descuento">Valor del descuento *</label>
-            <input
-              class="form-input"
-              type="number"
-              id="cupon-valor-descuento"
-              placeholder="Ej: 15.50"
-              min="0.01"
-              step="0.01"
-              required
-            />
+            <input class="form-input" type="number" id="cupon-valor-descuento" placeholder="Ej: 15.50" min="0.01"
+              step="0.01" required />
           </div>
         </div>
 
@@ -171,10 +146,66 @@
         <div class="coupon-result" id="cupon-resultado" style="display:none"></div>
       </div>
 
-<br>
-<br>
-<br>
-<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- Reporte de productos más vendidos -->
+      <div class="section-header">
+        <div>
+          <div class="section-title">Reporte de productos más vendidos</div>
+          <div class="section-sub">
+            Filtrá por mes y año para ver los productos ordenados desde el más vendido al menos vendido.
+          </div>
+        </div>
+      </div>
+
+      <div class="reporte-form-card">
+        <div class="reporte-form-grid">
+          <div class="form-group">
+            <label class="form-label" for="reporte-mes">Mes *</label>
+            <input class="form-input" type="number" id="reporte-mes" placeholder="Ej: 6" min="1" max="12" step="1"
+              required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reporte-anio">Año *</label>
+            <input class="form-input" type="number" id="reporte-anio" placeholder="Ej: 2026" min="1" step="1"
+              required />
+          </div>
+        </div>
+
+        <div class="reporte-actions">
+          <button class="btn-solid" id="btn-generar-reporte-mas-vendidos" type="button">
+            Generar reporte
+          </button>
+        </div>
+      </div>
+
+      <div class="orders-table-wrap" id="reporte-mas-vendidos-wrap" style="display:none">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>ID Producto</th>
+              <th>Producto</th>
+              <th>Marca</th>
+              <th>Cantidad vendida</th>
+              <th>Precio unitario</th>
+              <th>Stock actual</th>
+            </tr>
+          </thead>
+          <tbody id="reporte-mas-vendidos-tbody">
+            <tr>
+              <td colspan="6">No hay datos para mostrar.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Header -->
       <div class="section-header">
         <div>
@@ -183,14 +214,14 @@
         </div>
         <button class="btn-solid" id="btn-recargar" type="button">⟳ Recargar</button>
       </div>
- 
+
       <!-- Tabla de pedidos -->
       <div class="orders-table-wrap">
         <div class="loading-state" id="loading-state">
           <div class="spinner"></div>
           <p>Cargando pedidos...</p>
         </div>
- 
+
         <table class="orders-table" id="orders-table" style="display:none">
           <thead>
             <tr>
@@ -205,16 +236,16 @@
           </thead>
           <tbody id="orders-tbody"></tbody>
         </table>
- 
+
         <div class="empty-state" id="empty-state" style="display:none">
           <div class="empty-ico">📦</div>
           <p>No hay pedidos registrados aún.</p>
         </div>
       </div>
- 
+
     </div>
   </div>
- 
+
   <div class="toast" id="toast"></div>
 
   <!-- Modal: motivo de cancelación -->
@@ -224,14 +255,11 @@
         <span class="modal-ico">&#128683;</span>
         <h2 class="modal-title" id="modal-title">Cancelar pedido</h2>
       </div>
-      <p class="modal-desc">Ingresá el motivo de la cancelación. Este campo es <strong>obligatorio</strong> y quedará registrado en el pedido.</p>
-      <textarea
-        id="modal-motivo"
-        class="modal-textarea"
-        placeholder="Ej: El cliente solicitó la cancelación por cambio de domicilio..."
-        maxlength="500"
-        rows="4"
-      ></textarea>
+      <p class="modal-desc">Ingresá el motivo de la cancelación. Este campo es <strong>obligatorio</strong> y quedará
+        registrado en el pedido.</p>
+      <textarea id="modal-motivo" class="modal-textarea"
+        placeholder="Ej: El cliente solicitó la cancelación por cambio de domicilio..." maxlength="500"
+        rows="4"></textarea>
       <p class="modal-error" id="modal-error" style="display:none"></p>
       <div class="modal-actions">
         <button class="btn-modal-cancel" id="modal-cancel" type="button">Volver</button>
@@ -242,4 +270,5 @@
 
   <script src="/frontend/js/VendedorPedido.js"></script>
 </body>
+
 </html>
