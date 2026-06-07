@@ -73,13 +73,13 @@ function extraerErroresCampos(errores) {
   return valores.length ? valores[0] : "";
 }
 
-// Control visual para mostrar u ocultar la contrasena.
+// Control visual para mostrar u ocultar la contraseña.
 function alternarVisibilidadContrasena() {
   const contrasenaOculta = elementos.inputPassword.type === "password";
 
   elementos.inputPassword.type = contrasenaOculta ? "text" : "password";
-  elementos.iconoOjoVisible.hidden = contrasenaOculta;
-  elementos.iconoOjoOculto.hidden = !contrasenaOculta;
+  elementos.iconoOjoVisible.classList.toggle("ico-oculto", contrasenaOculta);
+  elementos.iconoOjoOculto.classList.toggle("ico-oculto", !contrasenaOculta);
 }
 
 function obtenerDatosFormulario() {
@@ -215,6 +215,10 @@ function vincularEventos() {
 }
 
 function iniciar() {
+  // Estado inicial: ojo abierto visible, ojo tachado oculto
+  elementos.iconoOjoVisible.classList.remove("ico-oculto");
+  elementos.iconoOjoOculto.classList.add("ico-oculto");
+
   vincularEventos();
 }
 

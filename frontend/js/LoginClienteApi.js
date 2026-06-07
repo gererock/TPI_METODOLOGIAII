@@ -13,12 +13,15 @@ const btnToggle     = document.getElementById("btn-toggle-pass");
 const icoEye        = document.getElementById("ico-eye");
 const icoEyeOff     = document.getElementById("ico-eye-off");
 
+// Estado inicial: ojo abierto visible, ojo tachado oculto
+icoEyeOff.classList.add("ico-oculto");
+
 // Toggle mostrar/ocultar contraseña
 btnToggle.addEventListener("click", () => {
   const oculta = inputPassword.type === "password";
   inputPassword.type = oculta ? "text" : "password";
-  icoEye.hidden    =  oculta;
-  icoEyeOff.hidden = !oculta;
+  icoEye.classList.toggle("ico-oculto", oculta);
+  icoEyeOff.classList.toggle("ico-oculto", !oculta);
 });
 
 // Enter dispara login
@@ -39,7 +42,7 @@ async function iniciarSesion() {
     return;
   }
 
-  let urlLogin   = URL_LOGIN_CLIENTE;
+  let urlLogin    = URL_LOGIN_CLIENTE;
   let tipoUsuario = "CLIENTE";
 
   if (email === EMAIL_ADMIN) {
@@ -50,7 +53,7 @@ async function iniciarSesion() {
     tipoUsuario = "VENDEDOR";
   }
 
-  btnLogin.disabled   = true;
+  btnLogin.disabled    = true;
   btnLogin.textContent = "Ingresando...";
 
   try {

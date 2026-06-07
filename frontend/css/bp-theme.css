@@ -203,7 +203,9 @@ button, input, textarea, select { font: inherit; }
 .toggle-pass {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
   background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px;
-  display: flex; align-items: center; transition: color var(--transition);
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; flex-shrink: 0;
+  transition: color var(--transition);
 }
 .toggle-pass:hover { color: var(--ink); }
 
@@ -230,6 +232,15 @@ button, input, textarea, select { font: inherit; }
   transition: opacity 0.3s, transform 0.3s; pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
+
+/* Toggle de contraseña */
+.toggle-pass svg {
+  display: block;
+}
+
+.toggle-pass .ico-oculto {
+  display: none;
+}
 
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp {
