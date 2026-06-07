@@ -1,8 +1,32 @@
+const adminLogueado = localStorage.getItem("adminLogueado");
+
+if (!adminLogueado) {
+  window.location.href = "/frontend/pages/LoginCliente.html";
+}
+
+const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+if (btnCerrarSesion) {
+  btnCerrarSesion.addEventListener("click", () => {
+    localStorage.removeItem("adminLogueado");
+    window.location.href = "/frontend/pages/LoginCliente.html";
+  });
+}
+
 // Configuracion general y referencias del panel de administracion.
+
+
+
 const URL_API = "http://localhost:8080";
+const URL_REPORTE_STOCK_MINIMO = `${URL_API}/api/productos/reporte-stock-minimo`;
 const DURACION_TOAST_MS = 3500;
 const FILA_TABLA_VACIA = '<tr class="empty-row"><td colspan="6">No hay productos cargados aun.</td></tr>';
 const IDS_CAMPOS_PRODUCTO = ["nombre", "marca", "precio", "stock", "stock_min", "foto", "descripcion"];
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 
 const elementos = {
   toast: document.getElementById("toast"),
@@ -10,6 +34,10 @@ const elementos = {
   botonCancelar: document.getElementById("btn-cancelar"),
   botonIrACrear: document.getElementById("btn-ir-crear"),
   cuerpoTablaProductos: document.getElementById("products-tbody"),
+
+  cuerpoTablaReporteStock: document.getElementById("reporte-stock-tbody"),
+  botonActualizarReporteStock: document.getElementById("btn-actualizar-reporte-stock"),
+
   botonesPestanas: document.querySelectorAll(".tab-btn"),
   panelesPestanas: document.querySelectorAll(".tab-panel"),
   camposFormulario: Object.fromEntries(
@@ -80,6 +108,10 @@ function activarPestana(idPestana) {
   elementos.panelesPestanas.forEach((panel) => {
     panel.classList.toggle("active", panel.id === `tab-${idPestana}`);
   });
+
+  if (idPestana === "reporte-stock") {
+    cargarReporteStockMinimo();
+  }
 }
 
 // Render de la tabla con productos traidos desde el backend.
@@ -187,6 +219,60 @@ async function cargarProductosAdmin() {
     elementos.cuerpoTablaProductos.innerHTML = `
       <tr class="empty-row">
         <td colspan="6">Error al cargar productos: ${escaparHtml(error.message)}</td>
+<<<<<<< Updated upstream
+=======
+      </tr>
+    `;
+  }
+}
+
+async function cargarReporteStockMinimo() {
+  if (!elementos.cuerpoTablaReporteStock) {
+    return;
+  }
+
+  elementos.cuerpoTablaReporteStock.innerHTML = `
+    <tr class="empty-row">
+      <td colspan="5">Cargando reporte...</td>
+    </tr>
+  `;
+
+  try {
+    const respuesta = await fetch(URL_REPORTE_STOCK_MINIMO);
+    const data = await respuesta.json();
+
+    if (!respuesta.ok) {
+      throw new Error(extraerMensaje(data));
+    }
+
+    const productos = data.data || [];
+
+    if (productos.length === 0) {
+      elementos.cuerpoTablaReporteStock.innerHTML = `
+        <tr class="empty-row">
+          <td colspan="5">No hay productos cerca del stock mínimo.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    elementos.cuerpoTablaReporteStock.innerHTML = productos
+      .map((producto) => `
+        <tr>
+          <td>${escaparHtml(producto.codigo)}</td>
+          <td>${escaparHtml(producto.nombre)}</td>
+          <td>${escaparHtml(producto.stockActual)}</td>
+          <td>${escaparHtml(producto.stockMinimo)}</td>
+          <td>${escaparHtml(producto.estado)}</td>
+        </tr>
+      `)
+      .join("");
+
+  } catch (error) {
+    elementos.cuerpoTablaReporteStock.innerHTML = `
+      <tr class="empty-row">
+        <td colspan="5">Error al cargar reporte: ${escaparHtml(error.message)}</td>
+>>>>>>> Stashed changes
       </tr>
     `;
   }
@@ -225,6 +311,7 @@ async function crearProducto() {
     mostrarToast(`OK ${extraerMensaje(data)}`);
     limpiarFormularioProducto();
     await cargarProductosAdmin();
+    await cargarReporteStockMinimo();
     activarPestana("productos");
   } catch (error) {
     console.error("[crearProducto]", error);
@@ -238,14 +325,28 @@ function vincularEventos() {
     boton.addEventListener("click", () => activarPestana(boton.dataset.tab));
   });
 
-  elementos.botonIrACrear.addEventListener("click", () => activarPestana("crear"));
-  elementos.botonCrearProducto.addEventListener("click", crearProducto);
-  elementos.botonCancelar.addEventListener("click", manejarCancelacionFormulario);
+  if (elementos.botonIrACrear) {
+    elementos.botonIrACrear.addEventListener("click", () => activarPestana("crear"));
+  }
+
+  if (elementos.botonCrearProducto) {
+    elementos.botonCrearProducto.addEventListener("click", crearProducto);
+  }
+
+  if (elementos.botonCancelar) {
+    elementos.botonCancelar.addEventListener("click", manejarCancelacionFormulario);
+  }
+
+  if (elementos.botonActualizarReporteStock) {
+    elementos.botonActualizarReporteStock.addEventListener("click", cargarReporteStockMinimo);
+  }
 }
 
 function iniciar() {
   vincularEventos();
   cargarProductosAdmin();
+ 
+  cargarReporteStockMinimo();
 }
 
 iniciar();

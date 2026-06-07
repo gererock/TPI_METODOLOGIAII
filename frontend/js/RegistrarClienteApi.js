@@ -193,11 +193,10 @@ async function registrarCliente() {
       return;
     }
 
-    localStorage.setItem("cliente", JSON.stringify(data.data));
-    mostrarToast(`OK ${extraerMensaje(data)}`);
+    mostrarToast("OK Cliente registrado correctamente. Ahora iniciá sesión.");
 
     window.setTimeout(() => {
-      window.location.href = "/frontend/pages/CatalogoCliente.html";
+      window.location.href = "/frontend/pages/LoginCliente.html";
     }, 1200);
   } catch (error) {
     console.error("[registrar]", error);

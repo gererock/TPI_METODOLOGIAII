@@ -1,24 +1,7 @@
- /* ══════════════════════════════════════════
-       Admin.css — BodyPaint (mismo sistema que catalogo.css)
-       Paleta: navy #0f1923 | teal #2a7f8f | cyan #38b6cc | white #f4f6f8
-    ══════════════════════════════════════════ */
-    :root {
-      --navy:      #0f1923;
-      --navy2:     #162231;
-      --navy3:     #1c2e40;
-      --teal:      #2a7f8f;
-      --cyan:      #38b6cc;
-      --cyan-light:#6fd0e0;
-      --white:     #f4f6f8;
-      --muted:     #8fa3b3;
-      --dim:       #4a6070;
-      --border:    rgba(56,182,204,.18);
-      --radius:    10px;
-      --shadow:    0 8px 40px rgba(0,0,0,.5);
-      --font-head: 'Barlow Condensed', sans-serif;
-      --font-body: 'Barlow', sans-serif;
-    }
+/* CreateAdminProduct.css — BodyPaint Luxury Theme */
+@import url('/frontend/css/bp-theme.css');
 
+<<<<<<< Updated upstream
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -27,10 +10,21 @@
       color: var(--white);
       min-height: 100vh;
     }
+=======
+/* ─── TABS ─── */
+.tabs-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 48px;
+}
+>>>>>>> Stashed changes
 
-    /* ─── UTILS ─── */
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+.tabs {
+  display: flex;
+  gap: 0;
+}
 
+<<<<<<< Updated upstream
     /* ─── NAVBAR ─── */
     .navbar {
       position: sticky; top: 0; z-index: 100;
@@ -114,14 +108,50 @@
     }
     .tab-btn:hover { color: var(--white); }
     .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+=======
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 16px 24px 14px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+  margin-bottom: -1px;
+}
 
-    /* ─── TAB PANELS ─── */
-    .tab-panel { display: none; animation: fadeUp .35s ease both; }
-    .tab-panel.active { display: block; }
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
 
-    /* ─── ADMIN CONTENT WRAPPER ─── */
-    .admin-content { padding: 40px 0 72px; }
+/* ─── ADMIN CONTENT ─── */
+.admin-content { padding: 40px 0 80px; background: var(--white); }
 
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp 0.3s ease; }
+>>>>>>> Stashed changes
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+<<<<<<< Updated upstream
     /* ─── SECTION HEADER ─── */
     .section-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -131,18 +161,23 @@
       font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: 1.5rem; font-weight: 900;
     }
     .section-sub { color: var(--muted); font-size: .85rem; margin-top: 3px; }
+=======
+.section-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 4px;
+}
+>>>>>>> Stashed changes
 
-    /* ─── FORM CARD ─── */
-    .form-card {
-      background: var(--navy2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      max-width: 780px;
-      margin: 0 auto;
-      animation: fadeUp .4s ease both;
-    }
+/* ─── PRODUCTS TABLE ─── */
+.products-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+}
 
+<<<<<<< Updated upstream
     .form-card-header {
       background: var(--navy3);
       border-bottom: 1px solid var(--border);
@@ -159,27 +194,40 @@
       font-family: var(--font-head, 'Barlow Condensed', sans-serif); font-size: 1.15rem; font-weight: 900;
     }
     .form-card-sub { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+=======
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+>>>>>>> Stashed changes
 
-    .form-card-body { padding: 28px; }
+.products-table thead {
+  background: var(--cream);
+  border-bottom: 1px solid var(--border2);
+}
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-    .form-row--3 { grid-template-columns: 1fr 1fr; }
-    .form-row--full { grid-template-columns: 1fr; }
+.products-table th {
+  padding: 13px 20px;
+  text-align: left;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
-    .form-group { display: flex; flex-direction: column; gap: 7px; }
-    .form-group--span2 { grid-column: span 2; }
-    .form-group--span3 { grid-column: span 3; }
+.products-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border2);
+  color: var(--ink);
+  font-weight: 300;
+}
 
-    .form-label {
-      font-size: .77rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--muted);
-    }
+.products-table tbody tr:last-child td { border-bottom: none; }
+.products-table tbody tr:hover { background: var(--cream); }
 
+<<<<<<< Updated upstream
     .form-input, .form-select, .form-textarea {
       background: var(--navy3); border: 1px solid var(--border); color: var(--white);
       font-family: var(--font-body, 'Barlow', sans-serif); font-size: .9rem;
@@ -192,34 +240,69 @@
     }
     .form-select { appearance: none; cursor: pointer; }
     .form-select option { background: var(--navy2); }
+=======
+.empty-row td {
+  text-align: center;
+  color: var(--light);
+  font-style: italic;
+  padding: 40px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+}
+>>>>>>> Stashed changes
 
-    .select-wrap { position: relative; }
-    .select-arrow {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      pointer-events: none; color: var(--muted); font-size: .7rem;
-    }
+/* ─── STOCK STATES ─── */
+.stock-minimo-row { background: rgba(180,60,60,0.04); }
+.stock-minimo-row:hover { background: rgba(180,60,60,0.08) !important; }
 
-    .form-textarea { resize: vertical; min-height: 96px; line-height: 1.6; }
+.stock-alerta {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-display); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: var(--radius-sm);
+  background: rgba(180,60,60,0.08); color: #B43C3C;
+  border: 1px solid rgba(180,60,60,0.2);
+}
+.stock-normal {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-display); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: var(--radius-sm);
+  background: rgba(60,140,80,0.08); color: #3C8C50;
+  border: 1px solid rgba(60,140,80,0.2);
+}
 
-    .price-wrap { position: relative; }
-    .price-prefix {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--cyan); font-weight: 700; font-size: .9rem;
-    }
-    .price-wrap .form-input { padding-left: 28px; }
+/* ─── SECTION HEADER ─── */
+.section-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 28px; gap: 16px;
+}
+.section-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
+.section-sub { font-family: var(--font-body); font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
 
-    /* ─── FORM FOOTER ─── */
-    .form-card-footer {
-      background: var(--navy3); border-top: 1px solid var(--border);
-      padding: 18px 28px;
-      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
-    }
+/* ─── TABS ─── */
+.tabs-section {
+  background: var(--white); border-bottom: 1px solid var(--border2); padding: 0 48px;
+}
+.tabs { display: flex; }
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-display); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 16px 24px 14px; cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
 
-    /* ─── DIVIDER ─── */
-    .form-divider {
-      height: 1px; background: var(--border); margin: 4px 0 20px;
-    }
+/* ─── ADMIN CONTENT ─── */
+.admin-content { padding: 40px 0 80px; background: var(--white); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp 0.3s ease; }
 
+<<<<<<< Updated upstream
     /* ─── TOAST ─── */
     .toast {
       position: fixed; bottom: 28px; right: 28px; z-index: 999;
@@ -316,3 +399,32 @@
       font-size: 0.78rem;
       font-weight: 700;
     }
+=======
+/* ─── TABLE ─── */
+.products-table-wrap {
+  overflow-x: auto; border: 1px solid var(--border2);
+  border-radius: var(--radius); box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.products-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.products-table thead { background: var(--cream); border-bottom: 1px solid var(--border2); }
+.products-table th {
+  padding: 13px 20px; text-align: left;
+  font-family: var(--font-display); font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+}
+.products-table td {
+  padding: 14px 20px; border-bottom: 1px solid var(--border2);
+  font-family: var(--font-body); color: var(--ink);
+}
+.products-table tbody tr:last-child td { border-bottom: none; }
+.products-table tbody tr:hover { background: var(--cream); }
+.empty-row td {
+  text-align: center; color: var(--light); font-style: italic;
+  padding: 40px; font-family: var(--font-display); font-size: 0.9rem;
+}
+.price-col { font-family: var(--font-display); font-weight: 700; }
+
+@media (max-width: 768px) {
+  .tabs-section { padding: 0 20px; }
+}
+>>>>>>> Stashed changes

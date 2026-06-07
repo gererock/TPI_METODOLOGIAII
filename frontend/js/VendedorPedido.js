@@ -1,4 +1,11 @@
 const URL_API = "http://localhost:8080";
+const URL_CLIENTES = `${URL_API}/api/clientes`;
+const URL_CUPONES = `${URL_API}/api/cupones`;
+const vendedorLogueado = localStorage.getItem("vendedorLogueado");
+
+if (!vendedorLogueado) {
+  window.location.href = "/frontend/pages/LoginCliente.html";
+}
     const ESTADOS = ["EN_PROCESO", "ENTREGADO", "CANCELADO"];
     const ESTADOS_LABELS = { EN_PROCESO: "En proceso", ENTREGADO: "Entregado", CANCELADO: "Cancelado" };
  
@@ -7,8 +14,23 @@ const URL_API = "http://localhost:8080";
     const $tbody     = document.getElementById("orders-tbody");
     const $empty     = document.getElementById("empty-state");
     const $statsBar  = document.getElementById("stats-bar");
+
+    const $btnCerrarSesionVendedor = document.getElementById("btn-cerrar-sesion-vendedor");
+
     const $toast     = document.getElementById("toast");
     const $btnReload = document.getElementById("btn-recargar");
+
+    const $clientesTbody = document.getElementById("clientes-tbody");
+    const $btnRecargarClientes = document.getElementById("btn-recargar-clientes");
+
+
+    const $cuponClienteId = document.getElementById("cupon-cliente-id");
+    const $cuponFechaDesde = document.getElementById("cupon-fecha-desde");
+    const $cuponFechaHasta = document.getElementById("cupon-fecha-hasta");
+    const $cuponTipoDescuento = document.getElementById("cupon-tipo-descuento");
+    const $cuponValorDescuento = document.getElementById("cupon-valor-descuento");
+    const $btnGenerarCupon = document.getElementById("btn-generar-cupon");
+    const $cuponResultado = document.getElementById("cupon-resultado");
 
     // ── Modal cancelación ──────────────────────────────────────────
     const $modal         = document.getElementById("modal-cancelacion");
@@ -62,7 +84,170 @@ const URL_API = "http://localhost:8080";
       $toast.classList.add("show");
       setTimeout(() => $toast.classList.remove("show"), 3500);
     }
- 
+
+
+    async function cargarClientes() {
+      if (!$clientesTbody) return;
+
+      $clientesTbody.innerHTML = `
+        <tr>
+          <td colspan="3">Cargando clientes...</td>
+        </tr>
+      `;
+
+      try {
+        const res = await fetch(URL_CLIENTES);
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Error al cargar clientes.");
+        }
+
+        const clientes = data.data ?? [];
+
+        renderClientes(clientes);
+
+      } catch (error) {
+        $clientesTbody.innerHTML = `
+          <tr>
+            <td colspan="3">Error al cargar clientes.</td>
+          </tr>
+        `;
+        mostrarToast("No se pudo cargar la lista de clientes.", true);
+      }
+    }
+
+
+    function renderClientes(clientes) {
+      if (!clientes.length) {
+        $clientesTbody.innerHTML = `
+          <tr>
+            <td colspan="3">No hay clientes registrados.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      $clientesTbody.innerHTML = clientes
+        .map((cliente) => `
+          <tr>
+            <td><strong>${esc(cliente.id)}</strong></td>
+            <td>${esc(cliente.nombre)}</td>
+            <td>${esc(cliente.email)}</td>
+          </tr>
+        `)
+        .join("");
+    }
+    
+    function obtenerPayloadCupon() {
+      return {
+        idCliente: Number($cuponClienteId.value),
+        fechaDesde: $cuponFechaDesde.value.trim(),
+        fechaHasta: $cuponFechaHasta.value.trim(),
+        tipoDescuento: $cuponTipoDescuento.value,
+        valorDescuento: Number($cuponValorDescuento.value),
+      };
+    }
+
+function validarFormularioCupon(cupon) {
+  const formatoFecha = /^\d{2}\/\d{2}\/\d{4}$/;
+
+  if (!Number.isInteger(cupon.idCliente) || cupon.idCliente <= 0) {
+    return "Debe ingresar un ID de cliente válido y mayor a 0.";
+  }
+
+  if (!cupon.fechaDesde) {
+    return "Debe ingresar la fecha desde.";
+  }
+
+  if (!formatoFecha.test(cupon.fechaDesde)) {
+    return "La fecha desde debe contener solo números y tener formato dd/mm/aaaa.";
+  }
+
+  if (!cupon.fechaHasta) {
+    return "Debe ingresar la fecha hasta.";
+  }
+
+  if (!formatoFecha.test(cupon.fechaHasta)) {
+    return "La fecha hasta debe contener solo números y tener formato dd/mm/aaaa.";
+  }
+
+  if (!cupon.tipoDescuento) {
+    return "Debe seleccionar el tipo de descuento.";
+  }
+
+  if (Number.isNaN(cupon.valorDescuento) || cupon.valorDescuento <= 0) {
+    return "El valor del descuento debe ser mayor a 0.";
+  }
+
+  return null;
+}
+
+function mostrarResultadoCupon(cupon) {
+  if (!$cuponResultado) return;
+
+  $cuponResultado.style.display = "block";
+  $cuponResultado.innerHTML = `
+    <strong>Cupón generado correctamente</strong><br>
+    Código: <strong>${esc(cupon.codigo)}</strong><br>
+    Cliente: ${esc(cupon.nombreCliente)} (${esc(cupon.emailCliente)})<br>
+    Vigencia: ${esc(cupon.fechaDesde)} al ${esc(cupon.fechaHasta)}<br>
+    Descuento: ${esc(cupon.valorDescuento)} ${cupon.tipoDescuento === "PORCENTAJE" ? "%" : "$"}<br>
+    <br>
+    <strong>Notificación:</strong><br>
+    ${esc(cupon.mensajeEnvioMail)}
+  `;
+}
+
+function limpiarFormularioCupon() {
+  $cuponClienteId.value = "";
+  $cuponFechaDesde.value = "";
+  $cuponFechaHasta.value = "";
+  $cuponTipoDescuento.value = "";
+  $cuponValorDescuento.value = "";
+}
+
+async function generarCupon() {
+  const cupon = obtenerPayloadCupon();
+  const error = validarFormularioCupon(cupon);
+
+  if (error) {
+    mostrarToast(error, true);
+    return;
+  }
+
+  try {
+    $btnGenerarCupon.disabled = true;
+    $btnGenerarCupon.textContent = "Generando...";
+
+    const res = await fetch(URL_CUPONES, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cupon),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.message || "No se pudo generar el cupón.");
+    }
+
+    mostrarToast("Cupón generado correctamente.");
+    mostrarResultadoCupon(data.data);
+    limpiarFormularioCupon();
+
+  } catch (error) {
+    mostrarToast(error.message, true);
+  } finally {
+    $btnGenerarCupon.disabled = false;
+    $btnGenerarCupon.textContent = "Generar cupón";
+  }
+}
+
+
+
     function estadoChip(estado) {
       const label = ESTADOS_LABELS[estado] ?? estado;
       return `<span class="estado-chip ${esc(estado)}">${esc(label)}</span>`;
@@ -330,6 +515,22 @@ const URL_API = "http://localhost:8080";
         }
       }
     }
- 
-    $btnReload.addEventListener("click", cargarPedidos);
-    cargarPedidos();
+$btnReload.addEventListener("click", cargarPedidos);
+
+if ($btnRecargarClientes) {
+  $btnRecargarClientes.addEventListener("click", cargarClientes);
+}
+
+if ($btnGenerarCupon) {
+  $btnGenerarCupon.addEventListener("click", generarCupon);
+}
+
+if ($btnCerrarSesionVendedor) {
+  $btnCerrarSesionVendedor.addEventListener("click", () => {
+    localStorage.removeItem("vendedorLogueado");
+    window.location.href = "/frontend/pages/LoginCliente.html";
+  });
+}
+
+cargarClientes();
+cargarPedidos();

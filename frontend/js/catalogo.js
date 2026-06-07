@@ -1,3 +1,4 @@
+
 import {
   agregarCantidadAlCarrito,
   construirResumenCarrito,
@@ -16,6 +17,15 @@ import {
 const URL_PAGINA_CHECKOUT = "/frontend/pages/CarritoCliente.html";
 const DURACION_ANIMACION_CARRITO_MS = 180;
 const DURACION_ANIMACION_MODAL_MS = 180;
+
+const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+if (btnCerrarSesion) {
+  btnCerrarSesion.addEventListener("click", () => {
+    localStorage.removeItem("clienteLogueado");
+    window.location.href = "/frontend/pages/LoginCliente.html";
+  });
+}
 
 // Estado general del catalogo, del modal de producto y del carrito flotante.
 const estado = {

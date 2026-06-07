@@ -8,6 +8,7 @@ public class ProductMapper {
 
 
     public static Producto toEntity(ProductoCreateRequestDto dto){
+<<<<<<< Updated upstream
         return Producto.builder()
                     .nombre(dto.nombre())
                     .marca(dto.marca())
@@ -18,6 +19,19 @@ public class ProductMapper {
                     .descripcion(dto.descripcion())
                     .sinStock(false)
                     .build();
+=======
+        Producto producto = Producto.builder()
+                        .nombre(dto.nombre())
+                        .marca(dto.marca())
+                        .precio(dto.precio())
+                        .stock(dto.stock())
+                        .stockMinimo(dto.stockMinimo())
+                        .foto(dto.foto())
+                        .descripcion(dto.descripcion())
+                        .sinStock(false)
+                        .build();
+        return producto;
+>>>>>>> Stashed changes
     }
 
 

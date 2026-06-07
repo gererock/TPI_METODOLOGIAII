@@ -35,4 +35,14 @@ public class ProductoGetController {
             );
 
     }
+
+    @GetMapping("/reporte-stock-minimo")
+    public ResponseEntity<?> obtenerReporteStockMinimo() {
+        return ResponseEntity.ok(
+            BaseResponse.ok(
+                    getService.obtenerReporteStockMinimo(),
+                    "Reporte de productos cerca del stock mínimo generado correctamente"
+            )
+        );
+    }
 }
