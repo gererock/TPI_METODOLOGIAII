@@ -13,6 +13,7 @@ public record  ClienteRegisterRequestDto(
     Long dni,
 
     @NotBlank(message="Debe completar el nombre y apellido") 
+    @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+\\s[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+$", message = "El nombre debe contener solo letras y un espacio entre el nombre y apellido")
     String nombre,
 
     @Pattern(
