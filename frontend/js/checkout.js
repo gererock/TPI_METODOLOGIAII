@@ -8,15 +8,13 @@ import {
   obtenerProductos,
 } from "/frontend/js/productos-api.js";
 
-// Rutas y tiempos de animacion del checkout.
-const URL_PAGINA_CATALOGO = "/frontend/pages/CatalogoCliente.html";
+const URL_PAGINA_CATALOGO      = "/frontend/pages/CatalogoCliente.html";
 const DURACION_ANIMACION_PAGO_MS = 180;
-const URL_API = "http://localhost:8080";
+const URL_API          = "http://localhost:8080";
 const URL_CREAR_PEDIDO = `${URL_API}/api/pedidos/generar`;
 const URL_APLICAR_CUPON = `${URL_API}/api/cupones/aplicar`;
-const URL_USAR_CUPON = `${URL_API}/api/cupones/usar`;
+const URL_USAR_CUPON   = `${URL_API}/api/cupones/usar`;
 
-// Estado de esta pantalla y referencias del modal de pago.
 const estado = {
   productos: [],
   temporizadorCierrePago: 0,
@@ -24,45 +22,46 @@ const estado = {
 };
 
 const elementos = {
-  listaProductos: document.getElementById("checkout-items"),
-  cantidadResumen: document.getElementById("summary-items"),
-  totalResumen: document.getElementById("summary-total"),
+  listaProductos:    document.getElementById("checkout-items"),
+  cantidadResumen:   document.getElementById("summary-items"),
+  totalResumen:      document.getElementById("summary-total"),
   botonPagarEfectivo: document.getElementById("cash-payment-btn"),
-  overlayPago: document.getElementById("payment-overlay"),
-  tituloPago: document.getElementById("payment-title"),
+  overlayPago:       document.getElementById("payment-overlay"),
+  tituloPago:        document.getElementById("payment-title"),
   botonCancelarPago: document.getElementById("payment-cancel-btn"),
   botonFinalizarPago: document.getElementById("payment-finish-btn"),
-
-  inputCodigoCupon: document.getElementById("codigo-cupon"),
+  inputCodigoCupon:  document.getElementById("codigo-cupon"),
   botonAplicarCupon: document.getElementById("btn-aplicar-cupon"),
-  mensajeCupon: document.getElementById("coupon-message"),
-  filaDescuento: document.getElementById("discount-row"),
-  descuentoResumen: document.getElementById("summary-discount"),
-  filaTotalFinal: document.getElementById("final-total-row"),
+  mensajeCupon:      document.getElementById("coupon-message"),
+  filaDescuento:     document.getElementById("discount-row"),
+  descuentoResumen:  document.getElementById("summary-discount"),
+  filaTotalFinal:    document.getElementById("final-total-row"),
   totalFinalResumen: document.getElementById("summary-final-total"),
 };
 
-// Helper para pintar contenido seguro dentro del resumen.
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function escaparHtml(valor) {
   return String(valor ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function obtenerClienteId() {
+  try {
+    const raw = localStorage.getItem("clienteLogueado");
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    return c.id ?? c.idCliente ?? null;
+  } catch { return null; }
 }
 
 function obtenerTotalAPagar(resumen) {
-  if (estado.cuponAplicado) {
-    return Number(estado.cuponAplicado.totalFinal);
-  }
-
-  return Number(resumen.total);
+  return estado.cuponAplicado ? Number(estado.cuponAplicado.totalFinal) : Number(resumen.total);
 }
 
+// ─── CUPÓN ───────────────────────────────────────────────────────────────────
 function mostrarMensajeCupon(mensaje, esError = false) {
   if (!elementos.mensajeCupon) return;
-
   elementos.mensajeCupon.textContent = mensaje;
   elementos.mensajeCupon.classList.remove("success", "error");
   elementos.mensajeCupon.classList.add(esError ? "error" : "success");
@@ -70,83 +69,66 @@ function mostrarMensajeCupon(mensaje, esError = false) {
 
 function limpiarMensajeCupon() {
   if (!elementos.mensajeCupon) return;
-
   elementos.mensajeCupon.textContent = "";
   elementos.mensajeCupon.classList.remove("success", "error");
 }
 
-function renderizarResumenCupon(resumen) {
-  if (!elementos.filaDescuento || !elementos.filaTotalFinal) {
-    return;
-  }
-
+function renderizarResumenCupon() {
+  if (!elementos.filaDescuento || !elementos.filaTotalFinal) return;
   if (!estado.cuponAplicado) {
     elementos.filaDescuento.style.display = "none";
     elementos.filaTotalFinal.style.display = "none";
     return;
   }
-
   elementos.filaDescuento.style.display = "flex";
   elementos.filaTotalFinal.style.display = "flex";
-
   elementos.descuentoResumen.textContent = `-${formatearPrecio(estado.cuponAplicado.descuentoAplicado)}`;
   elementos.totalFinalResumen.textContent = formatearPrecio(estado.cuponAplicado.totalFinal);
 }
 
-// Render de la pagina final de compra usando el mismo resumen del carrito.
+// ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderizarCheckout() {
   const resumen = construirResumenCarrito(estado.productos);
   const totalAPagar = obtenerTotalAPagar(resumen);
 
   elementos.cantidadResumen.textContent = String(resumen.totalUnidades);
-  elementos.totalResumen.textContent = formatearPrecio(resumen.total);
-  elementos.tituloPago.textContent = `Monto a pagar: ${formatearPrecio(totalAPagar)}`;
+  elementos.totalResumen.textContent    = formatearPrecio(resumen.total);
+  elementos.tituloPago.textContent      = `Monto a pagar: ${formatearPrecio(totalAPagar)}`;
   elementos.botonPagarEfectivo.disabled = resumen.totalUnidades === 0;
 
-  renderizarResumenCupon(resumen);
+  renderizarResumenCupon();
 
   if (!resumen.productos.length) {
     elementos.listaProductos.innerHTML = `
       <div class="checkout-empty">
         <strong>Tu carrito ya no tiene productos</strong>
-        <p>Puedes volver al catalogo para seguir comprando o revisar otro pedido.</p>
-        <a class="btn-outline" href="${URL_PAGINA_CATALOGO}">Volver al catalogo</a>
-      </div>
-    `;
+        <p>Podés volver al catálogo para seguir comprando.</p>
+        <a class="btn-outline" href="${URL_PAGINA_CATALOGO}">Volver al catálogo</a>
+      </div>`;
     return;
   }
 
-  elementos.listaProductos.innerHTML = resumen.productos
-    .map((producto) => `
-      <article class="checkout-item">
-        <img
-          class="checkout-item-img"
-          src="${escaparHtml(producto.foto || "")}"
-          alt="${escaparHtml(producto.nombre)}"
-        />
-
-        <div>
-          <h3 class="checkout-item-name">${escaparHtml(producto.nombre)}</h3>
-          <p class="checkout-item-brand">Marca: ${escaparHtml(producto.marca || "BodyPaint")}</p>
-          <p class="checkout-item-description">${escaparHtml(producto.descripcion || "Sin descripcion disponible.")}</p>
-          <p class="checkout-item-meta">
-            <span class="checkout-item-qty">${producto.cantidad} x</span>
-            <span class="checkout-item-unit-price">${formatearPrecio(producto.precioUnitario)}</span>
-          </p>
-        </div>
-
-        <div class="checkout-item-total">
-          <strong>${formatearPrecio(producto.subtotal)}</strong>
-        </div>
-      </article>
-    `)
-    .join("");
+  elementos.listaProductos.innerHTML = resumen.productos.map((p) => `
+    <article class="checkout-item">
+      <img class="checkout-item-image" src="${escaparHtml(p.foto || "")}" alt="${escaparHtml(p.nombre)}" />
+      <div>
+        <h3 class="checkout-item-name">${escaparHtml(p.nombre)}</h3>
+        <p class="checkout-item-brand">Marca: ${escaparHtml(p.marca || "BodyPaint")}</p>
+        <p class="checkout-item-description">${escaparHtml(p.descripcion || "Sin descripción disponible.")}</p>
+        <p class="checkout-item-meta">
+          <span class="checkout-item-qty">${p.cantidad} x</span>
+          <span class="checkout-item-unit-price">${formatearPrecio(p.precioUnitario)}</span>
+        </p>
+      </div>
+      <div class="checkout-item-total">
+        <strong>${formatearPrecio(p.subtotal)}</strong>
+      </div>
+    </article>`).join("");
 }
 
-// Control de apertura y cierre del modal de pago.
+// ─── MODAL ────────────────────────────────────────────────────────────────────
 function abrirModalPago() {
   elementos.overlayPago.hidden = false;
-  // Forzar reflow para que la transición funcione al agregar la clase
   elementos.overlayPago.getBoundingClientRect();
   elementos.overlayPago.classList.add("is-open");
   document.body.classList.add("body-locked");
@@ -155,107 +137,81 @@ function abrirModalPago() {
 function cerrarModalPago(inmediato = false) {
   elementos.overlayPago.classList.remove("is-open");
   document.body.classList.remove("body-locked");
-
-  if (inmediato) {
-    elementos.overlayPago.hidden = true;
-    return;
-  }
-
+  if (inmediato) { elementos.overlayPago.hidden = true; return; }
   window.clearTimeout(estado.temporizadorCierrePago);
   estado.temporizadorCierrePago = window.setTimeout(() => {
     elementos.overlayPago.hidden = true;
   }, DURACION_ANIMACION_PAGO_MS);
 }
 
-async function cargarProductos() {
+// ─── DOMICILIO ────────────────────────────────────────────────────────────────
+async function cargarDomicilioCheckout() {
+  const skeletonEl = document.getElementById("domicilio-skeleton-checkout");
+  const textoEl    = document.getElementById("domicilio-texto-checkout");
+  if (!skeletonEl || !textoEl) return;
+
+  function formatear(d) {
+    const partes = [`${d.calle} ${d.altura}`];
+    if (d.piso)         partes.push(`Piso ${d.piso}`);
+    if (d.departamento) partes.push(`Dpto. ${d.departamento}`);
+    partes.push(`${d.localidad}, ${d.provincia}`);
+    partes.push(`CP ${d.codigoPostal}`);
+    return partes.join(" — ");
+  }
+
+  function mostrar(d) {
+    textoEl.textContent   = d ? formatear(d) : "No se pudo cargar el domicilio.";
+    skeletonEl.style.display = "none";
+    textoEl.style.display    = "block";
+  }
+
+  // 1. sessionStorage — instantáneo, sin red
   try {
-    estado.productos = await obtenerProductos();
-  } catch (error) {
-    console.error("[checkout] No se pudieron cargar los productos.", error);
-    estado.productos = [];
-  }
+    const guardado = sessionStorage.getItem("domicilioCliente");
+    if (guardado) { mostrar(JSON.parse(guardado)); return; }
+  } catch { /* sigue */ }
 
-  renderizarCheckout();
-}
-
-function obtenerClienteId() {
-  const clienteGuardado = localStorage.getItem("cliente");
-
-  if (!clienteGuardado) {
-    return null;
-  }
-
-  try {
-    const cliente = JSON.parse(clienteGuardado);
-    return cliente.id ?? cliente.idCliente ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function construirDiccionarioProductosPedido() {
-  const resumen = construirResumenCarrito(estado.productos);
-
-  const productos = {};
-
-  resumen.productos.forEach((producto) => {
-    productos[producto.idProducto] = producto.cantidad;
-  });
-
-  return productos;
-}
-
-async function aplicarCupon() {
-  const resumen = construirResumenCarrito(estado.productos);
+  // 2. Fallback fetch (entró directo al checkout sin pasar por el carrito)
   const idCliente = obtenerClienteId();
-  const codigoCupon = Number(elementos.inputCodigoCupon.value);
+  if (!idCliente) { mostrar(null); return; }
+
+  try {
+    const resp = await fetch(`${URL_API}/api/clientes/${idCliente}/domicilio`);
+    const data = await resp.json();
+    if (!resp.ok) throw new Error();
+    sessionStorage.setItem("domicilioCliente", JSON.stringify(data.data));
+    mostrar(data.data);
+  } catch {
+    mostrar(null);
+  }
+}
+
+// ─── CUPÓN: APLICAR ───────────────────────────────────────────────────────────
+async function aplicarCupon() {
+  const resumen   = construirResumenCarrito(estado.productos);
+  const idCliente = obtenerClienteId();
+  const codigo    = Number(elementos.inputCodigoCupon.value);
 
   limpiarMensajeCupon();
 
-  if (!idCliente) {
-    mostrarMensajeCupon("No se encontró el cliente logueado.", true);
-    return;
-  }
-
-  if (!Number.isInteger(codigoCupon) || codigoCupon <= 0) {
-    mostrarMensajeCupon("Debe ingresar un código de cupón válido.", true);
-    return;
-  }
-
-  if (resumen.total <= 0) {
-    mostrarMensajeCupon("El total del pedido debe ser mayor a 0.", true);
-    return;
-  }
+  if (!idCliente) { mostrarMensajeCupon("No se encontró el cliente logueado.", true); return; }
+  if (!Number.isInteger(codigo) || codigo <= 0) { mostrarMensajeCupon("Ingresá un código de cupón válido.", true); return; }
+  if (resumen.total <= 0) { mostrarMensajeCupon("El total del pedido debe ser mayor a 0.", true); return; }
 
   try {
     elementos.botonAplicarCupon.disabled = true;
     elementos.botonAplicarCupon.textContent = "Aplicando...";
 
-    const respuesta = await fetch(URL_APLICAR_CUPON, {
+    const resp = await fetch(URL_APLICAR_CUPON, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idCliente: idCliente,
-        codigoCupon: codigoCupon,
-        totalPedido: resumen.total,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idCliente, codigoCupon: codigo, totalPedido: resumen.total }),
     });
-
-    const data = await respuesta.json().catch(() => ({}));
-
-    if (!respuesta.ok) {
-      const mensaje = data.message ?? data.error ?? "No se pudo aplicar el cupón.";
-      throw new Error(mensaje);
-    }
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(data.message ?? data.error ?? "No se pudo aplicar el cupón.");
 
     estado.cuponAplicado = data.data;
-
-    mostrarMensajeCupon(
-      `Cupón aplicado correctamente. Descuento: ${formatearPrecio(data.data.descuentoAplicado)}`
-    );
-
+    mostrarMensajeCupon(`Cupón aplicado. Descuento: ${formatearPrecio(data.data.descuentoAplicado)}`);
     renderizarCheckout();
   } catch (error) {
     estado.cuponAplicado = null;
@@ -267,115 +223,78 @@ async function aplicarCupon() {
   }
 }
 
-
+// ─── CUPÓN: MARCAR COMO USADO ─────────────────────────────────────────────────
 async function marcarCuponComoUsado() {
-  if (!estado.cuponAplicado) {
-    return;
-  }
-
+  if (!estado.cuponAplicado) return;
   const idCliente = obtenerClienteId();
+  if (!idCliente) throw new Error("No se encontró el cliente para marcar el cupón como usado.");
 
-  if (!idCliente) {
-    throw new Error("No se encontro el cliente para marcar el cupón como usado.");
-  }
-
-  const respuesta = await fetch(URL_USAR_CUPON, {
+  const resp = await fetch(URL_USAR_CUPON, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      idCliente: idCliente,
-      codigoCupon: estado.cuponAplicado.codigoCupon,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ idCliente, codigoCupon: estado.cuponAplicado.codigoCupon }),
   });
-
-  const data = await respuesta.json().catch(() => ({}));
-
-  if (!respuesta.ok) {
-    const mensaje = data.message ?? data.error ?? "No se pudo marcar el cupón como usado.";
-    throw new Error(mensaje);
-  }
-
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) throw new Error(data.message ?? data.error ?? "No se pudo marcar el cupón como usado.");
   return data;
 }
 
-
-
-
+// ─── PEDIDO ───────────────────────────────────────────────────────────────────
+function construirDiccionarioProductosPedido() {
+  const resumen = construirResumenCarrito(estado.productos);
+  const productos = {};
+  resumen.productos.forEach((p) => { productos[p.idProducto] = p.cantidad; });
+  return productos;
+}
 
 async function enviarPedidoAlBackend() {
-  const resumen = construirResumenCarrito(estado.productos);
-  const productos = construirDiccionarioProductosPedido();
-  const idCliente = obtenerClienteId();
+  const resumen     = construirResumenCarrito(estado.productos);
+  const idCliente   = obtenerClienteId();
   const totalAPagar = obtenerTotalAPagar(resumen);
 
-  if (!idCliente) {
-    throw new Error("No se encontro el cliente que realiza el pedido.");
-  }
+  if (!idCliente) throw new Error("No se encontró el cliente que realiza el pedido.");
 
-  const pedido = {
-    id_cliente: idCliente,
-    total: totalAPagar,
-    productos: productos,
-  };
-
-  const respuesta = await fetch(URL_CREAR_PEDIDO, {
+  const resp = await fetch(URL_CREAR_PEDIDO, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(pedido),
+    body: JSON.stringify({ id_cliente: idCliente, total: totalAPagar, productos: construirDiccionarioProductosPedido() }),
   });
-
-  const data = await respuesta.json().catch(() => ({}));
-
-  if (!respuesta.ok) {
-    const mensaje = data.message ?? data.error ?? `Error ${respuesta.status}`;
-    throw new Error(mensaje);
-  }
-
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) throw new Error(data.message ?? data.error ?? `Error ${resp.status}`);
   alert(data.message);
-
   return data;
 }
 
-// Eventos del resumen y del modal de pago en efectivo.
+// ─── CARGA INICIAL ────────────────────────────────────────────────────────────
+async function cargarProductos() {
+  try { estado.productos = await obtenerProductos(); }
+  catch (error) { console.error("[checkout] No se pudieron cargar los productos.", error); estado.productos = []; }
+  renderizarCheckout();
+}
+
+// ─── EVENTOS ──────────────────────────────────────────────────────────────────
 function vincularEventos() {
   elementos.botonPagarEfectivo.addEventListener("click", () => {
-    if (!elementos.botonPagarEfectivo.disabled) {
-      abrirModalPago();
-    }
+    if (!elementos.botonPagarEfectivo.disabled) abrirModalPago();
   });
 
   if (elementos.botonAplicarCupon) {
     elementos.botonAplicarCupon.addEventListener("click", aplicarCupon);
   }
 
-  elementos.botonCancelarPago.addEventListener("click", (e) => {
-    e.preventDefault();
-    cerrarModalPago();
-  });
+  elementos.botonCancelarPago.addEventListener("click", () => cerrarModalPago());
 
   elementos.botonFinalizarPago.addEventListener("click", async () => {
     const resumen = construirResumenCarrito(estado.productos);
-
-    if (!resumen.productos.length) {
-      cerrarModalPago();
-      renderizarCheckout();
-      return;
-    }
-
+    if (!resumen.productos.length) { cerrarModalPago(); renderizarCheckout(); return; }
     try {
       elementos.botonFinalizarPago.disabled = true;
       elementos.botonFinalizarPago.textContent = "Procesando...";
-
       await enviarPedidoAlBackend();
-
       await marcarCuponComoUsado();
-
       vaciarCarrito();
       sessionStorage.removeItem("cuponAplicado");
-      compraFinalizada = true;
-
+      sessionStorage.removeItem("domicilioCliente");
       cerrarModalPago(true);
       window.location.href = URL_PAGINA_CATALOGO;
     } catch (error) {
@@ -387,47 +306,26 @@ function vincularEventos() {
     }
   });
 
-  elementos.overlayPago.addEventListener("click", (evento) => {
-    if (evento.target === elementos.overlayPago) {
-      evento.preventDefault();
-      cerrarModalPago();
-    }
+  elementos.overlayPago.addEventListener("click", (e) => {
+    if (e.target === elementos.overlayPago) cerrarModalPago();
   });
 
-  document.addEventListener("keydown", (evento) => {
-    if (evento.key === "Escape" && !elementos.overlayPago.hidden) {
-      cerrarModalPago();
-    }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !elementos.overlayPago.hidden) cerrarModalPago();
   });
 }
 
-// Si el usuario cierra la pestaña, navega hacia atrás o sale del checkout
-// sin finalizar la compra, limpiamos el cupón del sessionStorage para que
-// no quede bloqueado/consumido sin haberse pagado.
-let compraFinalizada = false;
-
-function limpiarCuponSiNoSePago() {
-  if (!compraFinalizada) {
-    sessionStorage.removeItem("cuponAplicado");
-  }
-}
-
+// ─── ARRANQUE ─────────────────────────────────────────────────────────────────
 function iniciar() {
-  // Cargar cupón que viene desde CarritoCliente
   try {
     const cuponGuardado = sessionStorage.getItem("cuponAplicado");
-    if (cuponGuardado) {
-      estado.cuponAplicado = JSON.parse(cuponGuardado);
-    }
+    if (cuponGuardado) estado.cuponAplicado = JSON.parse(cuponGuardado);
   } catch { /* nada */ }
-
-  // Limpiar cupón si el usuario abandona sin pagar
-  window.addEventListener("pagehide", limpiarCuponSiNoSePago);
-  window.addEventListener("beforeunload", limpiarCuponSiNoSePago);
 
   vincularEventos();
   suscribirseAlCarrito(() => renderizarCheckout());
   cargarProductos();
+  cargarDomicilioCheckout();
 }
 
 iniciar();
