@@ -145,30 +145,25 @@ function renderizarCheckout() {
 
 // Control de apertura y cierre del modal de pago.
 function abrirModalPago() {
-  window.clearTimeout(estado.temporizadorCierrePago);
   elementos.overlayPago.hidden = false;
-  requestAnimationFrame(() => elementos.overlayPago.classList.add("is-open"));
+  // Forzar reflow para que la transición funcione al agregar la clase
+  elementos.overlayPago.getBoundingClientRect();
+  elementos.overlayPago.classList.add("is-open");
   document.body.classList.add("body-locked");
 }
 
 function cerrarModalPago(inmediato = false) {
   elementos.overlayPago.classList.remove("is-open");
-
-  const finalizarCierre = () => {
-    elementos.overlayPago.hidden = true;
-    document.body.classList.remove("body-locked");
-  };
+  document.body.classList.remove("body-locked");
 
   if (inmediato) {
-    finalizarCierre();
+    elementos.overlayPago.hidden = true;
     return;
   }
 
   window.clearTimeout(estado.temporizadorCierrePago);
   estado.temporizadorCierrePago = window.setTimeout(() => {
-    if (!elementos.overlayPago.classList.contains("is-open")) {
-      finalizarCierre();
-    }
+    elementos.overlayPago.hidden = true;
   }, DURACION_ANIMACION_PAGO_MS);
 }
 
@@ -401,6 +396,14 @@ function vincularEventos() {
 }
 
 function iniciar() {
+  // Cargar cupón que viene desde CarritoCliente
+  try {
+    const cuponGuardado = sessionStorage.getItem("cuponAplicado");
+    if (cuponGuardado) {
+      estado.cuponAplicado = JSON.parse(cuponGuardado);
+    }
+  } catch { /* nada */ }
+
   vincularEventos();
   suscribirseAlCarrito(() => renderizarCheckout());
   cargarProductos();

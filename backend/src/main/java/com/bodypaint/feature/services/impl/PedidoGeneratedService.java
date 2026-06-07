@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.bodypaint.feature.dto.request.PedidoRequestDto;
 import com.bodypaint.feature.dto.response.PedidoResponse;
 import com.bodypaint.feature.mapper.PedidoMapper;
-import com.bodypaint.feature.models.Cliente;
 import com.bodypaint.feature.models.Pedido;
 import com.bodypaint.feature.repository.IClientreRepository;
 import com.bodypaint.feature.repository.IPedidoRepository;
