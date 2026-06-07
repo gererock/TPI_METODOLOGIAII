@@ -120,7 +120,7 @@ function renderizarCheckout() {
     .map((producto) => `
       <article class="checkout-item">
         <img
-          class="checkout-item-image"
+          class="checkout-item-img"
           src="${escaparHtml(producto.foto || "")}"
           alt="${escaparHtml(producto.nombre)}"
         />
@@ -350,7 +350,10 @@ function vincularEventos() {
     elementos.botonAplicarCupon.addEventListener("click", aplicarCupon);
   }
 
-  elementos.botonCancelarPago.addEventListener("click", () => cerrarModalPago());
+  elementos.botonCancelarPago.addEventListener("click", (e) => {
+    e.preventDefault();
+    cerrarModalPago();
+  });
 
   elementos.botonFinalizarPago.addEventListener("click", async () => {
     const resumen = construirResumenCarrito(estado.productos);
@@ -370,6 +373,8 @@ function vincularEventos() {
       await marcarCuponComoUsado();
 
       vaciarCarrito();
+      sessionStorage.removeItem("cuponAplicado");
+      compraFinalizada = true;
 
       cerrarModalPago(true);
       window.location.href = URL_PAGINA_CATALOGO;
@@ -384,6 +389,7 @@ function vincularEventos() {
 
   elementos.overlayPago.addEventListener("click", (evento) => {
     if (evento.target === elementos.overlayPago) {
+      evento.preventDefault();
       cerrarModalPago();
     }
   });
@@ -395,6 +401,17 @@ function vincularEventos() {
   });
 }
 
+// Si el usuario cierra la pestaña, navega hacia atrás o sale del checkout
+// sin finalizar la compra, limpiamos el cupón del sessionStorage para que
+// no quede bloqueado/consumido sin haberse pagado.
+let compraFinalizada = false;
+
+function limpiarCuponSiNoSePago() {
+  if (!compraFinalizada) {
+    sessionStorage.removeItem("cuponAplicado");
+  }
+}
+
 function iniciar() {
   // Cargar cupón que viene desde CarritoCliente
   try {
@@ -403,6 +420,10 @@ function iniciar() {
       estado.cuponAplicado = JSON.parse(cuponGuardado);
     }
   } catch { /* nada */ }
+
+  // Limpiar cupón si el usuario abandona sin pagar
+  window.addEventListener("pagehide", limpiarCuponSiNoSePago);
+  window.addEventListener("beforeunload", limpiarCuponSiNoSePago);
 
   vincularEventos();
   suscribirseAlCarrito(() => renderizarCheckout());

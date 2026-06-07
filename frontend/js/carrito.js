@@ -352,11 +352,10 @@ function vincularEventos() {
 }
 
 function iniciar() {
-  // Restaurar cupón si estaba en sesión
-  try {
-    const saved = sessionStorage.getItem("cuponAplicado");
-    if (saved) estado.cuponAplicado = JSON.parse(saved);
-  } catch { /* nada */ }
+  // Si el usuario vuelve al carrito sin haber finalizado la compra,
+  // descartamos el cupón para que no quede bloqueado/consumido sin pagar.
+  sessionStorage.removeItem("cuponAplicado");
+  estado.cuponAplicado = null;
 
   vincularEventos();
   suscribirseAlCarrito(() => renderizarCarrito());
