@@ -25,17 +25,48 @@
   </div>
 
   <main class="container checkout-layout">
-    <section class="checkout-main">
-      <div class="section-card">
-        <div class="section-heading">
-          <div>
-            <p class="section-eyebrow" id="order-number"></p>
-            <h2 class="section-title">Productos seleccionados</h2>
+    <div class="checkout-main-col">
+
+      <!-- Productos -->
+      <section class="checkout-main">
+        <div class="section-card">
+          <div class="section-heading">
+            <div>
+              <p class="section-eyebrow" id="order-number"></p>
+              <h2 class="section-title">Productos seleccionados</h2>
+            </div>
           </div>
+          <div class="checkout-items" id="checkout-items"></div>
         </div>
-        <div class="checkout-items" id="checkout-items"></div>
-      </div>
-    </section>
+      </section>
+
+      <!-- Domicilio de envío -->
+      <section class="section-card domicilio-card">
+        <div class="section-heading domicilio-heading">
+          <div class="domicilio-heading-left">
+            <span class="domicilio-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+              </svg>
+            </span>
+            <div>
+              <h2 class="section-title">Domicilio de envío</h2>
+              <p class="domicilio-subtitle">El pedido será entregado en esta dirección</p>
+            </div>
+          </div>
+          <a class="btn-outline domicilio-toggle-btn" href="/frontend/pages/CarritoCliente.html"
+             style="font-size:0.78rem; padding:7px 16px;">
+            Modificar
+          </a>
+        </div>
+        <div class="domicilio-actual">
+          <p id="domicilio-skeleton-checkout" class="domicilio-skeleton">Cargando domicilio…</p>
+          <p id="domicilio-texto-checkout" class="domicilio-texto" style="display:none;"></p>
+        </div>
+      </section>
+
+    </div><!-- /checkout-main-col -->
 
     <aside class="checkout-sidebar">
       <div class="summary-card">
