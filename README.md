@@ -180,23 +180,3 @@ TPI_METODOLOGIAII/
     └── pages/                  # Admin, LoginCliente, RegistrarCliente, CatalogoCliente,
                                  # CarritoCliente, CheckoutCliente, Cliente, VendedorPedidos
 ```
-
-## Notas
-
-- **Tests**: solo existe un test de contexto de Spring Boot (`contextLoads`), sin tests de lógica de negocio, controllers ni repositorios.
-- **Licencia**: sin licencia definida (el `pom.xml` trae los tags `<licenses>`/`<license>` vacíos).
-- **Vendedor y Admin no se autentican contra la base de datos**: sus credenciales son fijas, definidas por variables de entorno. La entidad `Vendedor` y su repositorio siguen existiendo en el modelo (para el login por variable de entorno no hace falta), pero no hay ningún endpoint de registro de vendedor.
-- **Validación de email**: en el registro de cliente, el email debe pertenecer a los dominios `gmail.com`, `hotmail.com`, `outlook.com` o `yahoo.com`. No aplica a los logins.
-- **Contraseña**: mínimo 8 caracteres, solo validado en el registro de cliente (hasheada con BCrypt). Las de admin/vendedor son texto plano comparado directamente contra la variable de entorno.
-
----
-
-## ⚠️ Discrepancias encontradas entre la documentación provista y el código actual
-
-- **Ramas**: el repo tiene `main`, `origin/Frontend` (con F mayúscula, no `frontend`) y `origin/test`, no exactamente como se describía.
-- **Autores**: el historial de git muestra commits de 7 usuarios distintos (por email): `SanDeber`, `Nico-oli`/`Nicolas Olivieri`, `gererock`, `JuanFerrere`, `MateoAcosta69`, `benjaminpereyraa`, `Benjaaaaaaaaaaaaaaah`. No asumí una cantidad de integrantes fija más allá de lo que muestra el log.
-- **Login diferenciado por rol**: es real para Cliente (contra base de datos, con password hasheada), pero **no** para Vendedor y Admin: ambos usan un email/password fijo cargado desde variables de entorno, comparado en texto plano, sin tocar la base de datos.
-- **DNI**: no hay una validación de formato específico (largo fijo, patrón argentino, etc.) en el backend — solo se exige que sea un `Long`/`Integer` positivo. La validación de "solo números" para el DNI está del lado del frontend (`RegistrarClienteApi.js`), no en el DTO del backend.
-- **Cupones de descuento**: no encontré un "envío" real de mail; el sistema arma un `mensajeEnvioMail` como texto simulado ("Se simuló el envío del cupón...") sin integración con ningún proveedor de correo.
-- **H2**: sigue presente como dependencia (`spring-boot-h2console`) y explícitamente deshabilitada por configuración, no fue removida del todo tras la migración a PostgreSQL.
-- **Tests**: no hay cobertura real de lógica de negocio, solo el test de arranque de contexto generado por defecto de Spring Boot. No incluí ninguna sección de "cobertura de tests" más allá de dejar esto explícito.
