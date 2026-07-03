@@ -1,6 +1,6 @@
-const URL_LOGIN_CLIENTE  = "http://localhost:8080/api/clientes/login";
-const URL_LOGIN_ADMIN    = "http://localhost:8080/api/admin/login";
-const URL_LOGIN_VENDEDOR = "http://localhost:8080/api/vendedor/login";
+const URL_LOGIN_CLIENTE  = "http://localhost:8081/api/clientes/login";
+const URL_LOGIN_ADMIN    = "http://localhost:8081/api/admin/login";
+const URL_LOGIN_VENDEDOR = "http://localhost:8081/api/vendedor/login";
 
 const EMAIL_ADMIN    = "admin@admin.bodypaint";
 const EMAIL_VENDEDOR = "vendedor@vendedor.bodypaint";

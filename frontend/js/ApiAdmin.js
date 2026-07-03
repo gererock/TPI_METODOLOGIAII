@@ -17,7 +17,7 @@ if (btnCerrarSesion) {
 
 
 
-const URL_API = "http://localhost:8080";
+const URL_API = "http://localhost:8081";
 const URL_REPORTE_STOCK_MINIMO = `${URL_API}/api/productos/reporte-stock-minimo`;
 const DURACION_TOAST_MS = 3500;
 const FILA_TABLA_VACIA = '<tr class="empty-row"><td colspan="6">No hay productos cargados aun.</td></tr>';

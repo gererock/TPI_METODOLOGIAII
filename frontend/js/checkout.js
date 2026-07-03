@@ -11,7 +11,7 @@ import {
 // Rutas y tiempos de animacion del checkout.
 const URL_PAGINA_CATALOGO = "/frontend/pages/CatalogoCliente.html";
 const DURACION_ANIMACION_PAGO_MS = 180;
-const URL_API = "http://localhost:8080";
+const URL_API = "http://localhost:8081";
 const URL_CREAR_PEDIDO = `${URL_API}/api/pedidos/generar`;
 const URL_APLICAR_CUPON = `${URL_API}/api/cupones/aplicar`;
 const URL_USAR_CUPON = `${URL_API}/api/cupones/usar`;

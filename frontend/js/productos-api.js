@@ -1,6 +1,6 @@
 // Funciones compartidas para traer productos y formatear datos
 // que despues usan catalogo, carrito y checkout.
-const URL_API = "http://localhost:8080";
+const URL_API = "http://localhost:8081";
 
 const formateadorPrecio = new Intl.NumberFormat("es-AR", {
   style: "currency",
